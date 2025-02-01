@@ -22,7 +22,6 @@ server.use((req, res, next) => {
 });
 server.use("/" , routes)
 
-server.listen(3001, "localhost", () => {
-    console.log(server.name + "is listening in 3001");
+server.listen(process.env.PORT || 3001, "0.0.0.0", () => {
+    console.log(server.name + " is listening on port " + (process.env.PORT || 3001));
 });
-    
