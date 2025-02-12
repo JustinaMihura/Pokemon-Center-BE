@@ -1,12 +1,15 @@
 const axios = require("axios");
-const baseUrl = require("./baseUrl");
+require("dotenv").config();
+
+const {BASEURL} = process.env
+
 
 
 const getPokemons = async (req,res) => {
 
     try {
         
-        const {data} = await axios.get(`${baseUrl}/pokemon?limit=10&offset=0`);
+        const {data} = await axios.get(`${BASEURL}pokemon?limit=10&offset=0`);
        const dato = await Promise.all(data.results.map( async element => await axios(element.url)));
        
        const finalResult = dato && dato.map((ele, ind) => {
