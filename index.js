@@ -2,7 +2,8 @@ const express = require("express");
 const server = express();
 const routes = require("./src/Routes/index.js");
 require("dotenv").config();
-const {sequelize }= require("./db.js")
+const {sequelize }= require("./DataBase/db.js")
+
 
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -15,7 +16,6 @@ server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
 
-// Configurar CORS para permitir múltiples orígenes
 server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -26,15 +26,25 @@ server.use((req, res, next) => {
 });
 server.use("/" , routes);
 
+const initializeApp = async () => {
 
+  try {
 
-sequelize.sync({force:"true"})
-.then(() => {
+    await sequelize.authenticate();
 
-  server.listen(process.env.PORT, process.env.NODE_ENV , () => {
-  console.log(server.name + " is listening on port " + (process.env.PORT));
-})
-})
-.catch(err => {
-  console.log({"error" :  err});
-});
+    await sequelize.sync({ force: true });
+
+    console.log(sequelize.models);
+    
+
+    server.listen(process.env.PORT, process.env.NODE_ENV , () => {
+      console.log(server.name + " is listening on port " + (process.env.PORT));
+    });
+
+  } catch (error) {
+    console.error('Error al inicializar la aplicación:', error);
+  }
+};
+
+initializeApp();
+

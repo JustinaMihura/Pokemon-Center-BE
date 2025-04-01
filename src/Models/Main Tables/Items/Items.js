@@ -36,7 +36,9 @@ module.exports = (sequelize) =>  {
                             //verion-group.id + text 
         //attributes.id (n:n)
         //fling-effect.id (1 a 1) allowNull true
-
+        //game_indexes.id = tabla intermedia = 
+                            //* game_index + generation.id
+        //
     }, 
         {
             timestamps : false

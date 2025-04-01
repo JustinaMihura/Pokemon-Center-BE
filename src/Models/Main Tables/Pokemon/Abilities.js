@@ -1,17 +1,37 @@
-/* const {Species,Evolution_Chain, Evolution, Stats, Types, Pokemon} = sequelize.models
+const { DataTypes} = require("sequelize");
 
-Pokemon.hasMany(Stats, {through : "PokemonStats" })
-Stats.hasMany(Pokemon, {through : "PokemonStats"})
-
-Pokemon.hasMany(Types , {through : "PokemonTypes"})
-Types.hasMany(Pokemon , {through : "PokemonTypes"})
-
-Pokemon.belongsTo(Species, {foreignKey : "species.id"})
-Species.hasMany(Pokemon, {through :  "species.id"})
-
-Species.belongsTo(Evolution_Chain, {through : "evolution_chain_id"})
-Evolution_Chain.hasMany(Species, {through : "evolution_chain_id"})
-
-Species.hasMany(Evolution , {through : "species.id"})
-Evolution.belongsTo(Species , {through : "species.id"})
- */
+module.exports = (sequelize) => {
+    sequelize.define("Abilities" , { 
+        id : {
+            type : DataTypes.INTEGER,
+            primaryKey : true
+        },
+        name : {
+            type : DataTypes.STRING(20),
+            allowNull : false
+        },
+        effect_changes : {
+            type : DataTypes.STRING(50),
+            allowNull : false
+        },
+        effect_entries : {
+            type : DataTypes.STRING(200),
+            allowNull : false
+        },
+        short_text : {
+            type : DataTypes.STRING(20),
+            allowNull : false
+        },
+        is_main_series : {
+            type : DataTypes.BOOLEAN,
+            allowNull : false
+        }
+        //"✅"pokemon.id = tabla intermedia = 
+                                //* pokemon id + slot + is_hidden
+        //"✅"generation.id
+    }, 
+        {
+            timestamps : false
+        }
+    )
+}

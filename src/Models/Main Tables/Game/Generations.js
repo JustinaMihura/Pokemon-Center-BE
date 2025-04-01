@@ -2,7 +2,7 @@ const {DataTypes} = require("sequelize");
 
 module.exports= (sequelize) => {
     
-    sequelize.define("Games" , {
+    sequelize.define("Generations" , {
         id : {
             type : DataTypes.INTEGER,
             primaryKey :  true
@@ -11,10 +11,12 @@ module.exports= (sequelize) => {
             type : DataTypes.STRING(30),
             allowNull : false
         },
-        main_region : {
-            type : DataTypes.STRING(30)
-        },
-        
+       //region.id 
+       //moves.id --> (1 a muchos)
+       //species.id --> (1 a muchos)
+       //types.id --> (1 a muchos)
+       //version.id --> (1 a muchos)
+       //abilities.id (1 a muchos) 
     }, 
     {
         timestamps : false

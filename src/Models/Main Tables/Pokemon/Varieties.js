@@ -1,16 +1,20 @@
 const {DataTypes} = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("MethodsOfEvolves", {
+
+    sequelize.define("Varieties" , {
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true
         },
-        name : {
-            type : DataTypes.INTEGER,
-            allowNull : false
-        }
-    },{
+        is_default : {
+            type : DataTypes.BOOLEAN,
+            allowNull : false,
+        },
+       
+    }, 
+    {
         timestamps : false
-    })
-};
+    }
+);
+}
