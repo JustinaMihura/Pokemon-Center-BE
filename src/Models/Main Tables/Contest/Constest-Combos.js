@@ -5,12 +5,17 @@ module.exports = (sequelize) => {
 
         id : {
             type : DataTypes.INTEGER,
-            primaryKey : true
+            primaryKey : true,
+            autoIncrement : true
         },
         type : {
-            type : DataTypes.ENUM('Normal' , 'Super'),
+            type : DataTypes.ENUM('normal' , 'super'),
             allowNull : false
         },
+        relation : {
+            type : DataTypes.ENUM('use_after', 'use_before'),
+            allowNull : true
+        }
     }, 
         {
             timestamps : false

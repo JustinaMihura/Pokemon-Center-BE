@@ -51,7 +51,19 @@ module.exports = (sequelize) => {
         Machines,
         Target,
         Move_Stats_Change,
-        Locations
+        Locations,
+        Contest_Combos,
+        Contest_Effects,
+        Contest_Type,
+        Move_Damage_Class,
+        Flavor_text_entries,
+        Meta,
+        Categories, 
+        Ailments,
+        Lengueage,
+        Names,
+        Past_Values,
+        Super_Contest_Effects
        } = sequelize.models;
 
 
@@ -154,7 +166,7 @@ Pokemon.belongsToMany(Types, {
 
 
     //?____________________________________________________________________________________________________________________________________
-    //?____________________________-Moves-__________________________________________________________________________________________________
+    //?___________________________________________________-Moves-__________________________________________________________________________
   
   Pokemon.belongsToMany(Moves, { 
     through: Pokemons_Moves,
@@ -202,16 +214,15 @@ Pokemon.belongsToMany(Types, {
   });
   
   Moves.belongsTo(Generations , {foreignKey : "generation_id"})
-  Generations.hasMany(Moves, {foreignKey : "moves_id"})
+  Generations.hasMany(Moves, {foreignKey : "generation_id"})
   
   Moves.belongsTo(Types , {foreignKey : "types_id"})
-  Types.hasMany(Moves , {foreignKey : "moves_id"})
+  Types.hasMany(Moves , {foreignKey : "types_id"})
   
   Moves.belongsTo(Target , {foreignKey : "target_id"})
-  Target.hasMany(Moves, {foreignKey : "moves_id"})
+  Target.hasMany(Moves, {foreignKey : "target_id"})
   
-  Moves.belongsToMany(Stats, 
-    {
+  Moves.belongsToMany(Stats, {
       through : Move_Stats_Change,
       foreignKey : "stats_id",
       otherKey : "moves_id",
@@ -222,9 +233,106 @@ Pokemon.belongsToMany(Types, {
     through : Move_Stats_Change,
     foreignKey : "moves_id",
     otherKey : "stats_id",
-    as : "Moves_efects"
+    as : "Moves_effects"
   });
   
+  
+  Moves.belongsToMany(Moves , {
+    through : Contest_Combos, 
+    foreignKey : "move_id", 
+    otherKey : "use_after_id",
+    as : "UseAfter"
+  });
+
+  Moves.belongsToMany(Moves, {
+    through : Contest_Combos,
+    foreignKey : "move_id" ,
+    otherKey : "use_before_id", 
+    as : "useBefore" 
+  });
+
+  Moves.belongsTo(Contest_Effects , { foreignKey : "contest_effects_id"});
+  Contest_Effects.hasMany(Moves , { foreignKey : "contest_effects_id"});
+
+  Moves.belongsTo(Contest_Type , { foreignKey : "contest_type_id"});
+  Contest_Type.hasMany(Moves , { foreignKey : "contet_type_id"});
+
+  Moves.belongsTo(Move_Damage_Class , { foreignKey : "move_damage_class_id"});
+  Move_Damage_Class.hasMany(Moves , { foreignKey : "move_damage_class_id"});
+  
+
+  //* En el controlador establecer que solo guardaremos datos en la tabla "Flavor_text_entries"
+  //* Solo cuando sea en english o español. 
+
+  Moves.belongsToMany(Version_Groups , {
+    through : Flavor_text_entries, 
+    foreignKey : "moves_id",
+    otherKey : "version_group_id",
+  });
+
+  Version_Groups.belongsToMany(Moves , {
+    through : Flavor_text_entries, 
+    foreignKey : "version_group_id",
+    otherKey : "moves_id" 
+  });
+
+  Meta.belongsTo(Ailments , { foreignKey : "ailments_id"})
+  Ailments.hasMany(Meta , { foreignKey : "ailments_id"});
+
+  Meta.belongsTo(Categories , { foreignKey : "categories_id"})
+  Categories.hasMany(Meta , { foreignKey : "categories_id"})
+
+  Moves.belongsTo(Meta , {foreignKey : "meta_id"})
+  Meta.hasOne(Moves , { foreignKey : "meta_id"})
+
+  Moves.belongsToMany(Lengueage , {
+    through : Names , 
+    foreignKey : "move_id",
+    otherKey : "lengueage_id",
+    as : "Traducc"
+  });
+
+  Lengueage.belongsToMany(Moves , {
+    through : Names , 
+    foreignKey : "lengueage_id",
+    otherKey : "move_id",
+    as : "Moves_names"
+  });
+
+  Moves.belongsToMany(Version_Groups , {
+    through : Past_Values ,
+    foreignKey :"moves_id",
+    otherKey : "past_values_id",
+    as : "past_values"
+  });
+
+  Version_Groups.belongsToMany(Moves , {
+    through : Past_Values ,
+    foreignKey : "past_values_id",
+    otherKey :"moves_id",
+    as : "past_values"
+  });
+
+ Past_Values.belongsTo(Types , { foreignKey : "type_id"})
+ Types.hasMany(Past_Values , { foreignKey : "type_id"})
+
+  Moves.belongsTo(Super_Contest_Effects , { foreignKey : "super_contest_effects_id"});
+  Super_Contest_Effects.hasMany(Moves ,  { foreignKey : "super_contest_effects_id"});
+
+  Super_Contest_Effects.belongsToMany(Lengueage , {
+    through : Flavor_text_entries, 
+    foreignKey : "super_contest_effects_id",
+    otherKey : "lengueage_id",
+    as : "Flavor_text_entries"
+  });
+
+  Lengueage.belongsToMany(Super_Contest_Effects , {
+    through : Flavor_text_entries, 
+    foreignKey : "lengueage_id",
+    otherKey :"super_contest_effects_id",
+    as : "Super_contest_effects"
+  });
+
   //?____________________________________________________________________________________________________________________________________________________
 
   //?______________________________________- Locations_Areas / Encounters -_______________________________________________________________
@@ -299,9 +407,10 @@ Pokemon.belongsToMany(Types, {
 
 
 
-  //?_________________________________________________________________________________________________________________________
-  //?-------------------------------------------------------------------------------------------------------------------------
-  //?__________________________________________- SPECIES (spinal table) -_____________________________________________________
+  //?_____________________________________________________________________________________________________________________________________________
+  //?---------------------------------------------------------------------------------------------------------------------------------------------
+
+  //?__________________________________________- SPECIES (spinal table) -__________________________________________________________________________
   
   
   
@@ -345,9 +454,9 @@ Pokemon.belongsToMany(Types, {
     });
 
 
+//?_______________________________________________ -Evolution_Chain -_____________________________________________________________________________
 
 //* EVOLUTION CHAIN ---( tree structure )---> EVOLUTIONS is a node <--> Evolves_to (link table) <--> Another Evolutions Node.
-
 
 
   Evolution_Chains.hasMany(Species, {
@@ -358,7 +467,7 @@ Pokemon.belongsToMany(Types, {
   Species.belongsTo(Evolutions, {foreignKey : "species_id"})
   Evolutions.belongsTo(Species, {foreignKey : "species_id"})
     
-  Evolution_Chains.hasMany(Evolutions, { foreignKey: 'evolution_chain_id' ,as : "chain"})   //*--- Root 
+  Evolution_Chains.hasMany(Evolutions, { foreignKey: 'evolution_chain_id' ,as : "chain"})   //*-------- Root 
   Evolutions.belongsTo(Evolution_Chains, { foreignKey: 'evolution_chain_id' })
     
   Evolutions.belongsToMany(Evolutions, //*----------- Node to Node
@@ -379,7 +488,7 @@ Pokemon.belongsToMany(Types, {
       
   
    
-  //?______________________Evolutions_Details________________________________________________________________________________-
+  //?______________________________-Evolutions_Details-___________________________________________-
   
   Evolution_Details.belongsTo(Items, {foreignKey : "item_id", as : "item"})
   Items.hasMany(Evolution_Details, { foreignKey: 'item_id' });
@@ -456,10 +565,12 @@ Pokemon.belongsToMany(Types, {
 //?_________________________________________________________________________________________________________
 //?----------------------------------------------------------------------------------------------------------
 
-
+//! TERMINAR relaciones de Moves
+//! Terminar relaciones de Items 
+//! Crear relaciones de Berries, Contest, CARPETA Loactions en general  
 
   
-  
+  //! CREAR TABLA Usuarios
   
 
 };

@@ -9,11 +9,8 @@ module.exports = (sequelize) => {
         name : {
             type : DataTypes.STRING(15),
             allowNull : false
-        },
-        color : {
-            type : DataTypes.STRING(10),
-            allowNull : false
         }
+       
     } , {
       timestamps : false  
     })

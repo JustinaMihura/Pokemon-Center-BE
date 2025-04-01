@@ -1,8 +1,7 @@
 const { DataTypes} = require("sequelize");
 
 module.exports = (sequelize) => {
-    
-    sequelize.define("AilmentEffect" , { 
+    sequelize.define("Categories" , { 
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true
@@ -11,6 +10,9 @@ module.exports = (sequelize) => {
             type : DataTypes.STRING(20),
             allowNull : false
         },
+        description : {
+            type : DataTypes.STRING(50)
+        }
     }, 
         {
             timestamps : false

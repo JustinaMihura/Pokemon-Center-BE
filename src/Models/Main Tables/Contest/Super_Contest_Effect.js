@@ -1,17 +1,18 @@
 const { DataTypes} = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("Flavors" , { 
+    sequelize.define("Super_Contest_Effects" , { 
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true
         },
-        name : {
-            type : DataTypes.STRING(20),
+        appeal : {
+            type : DataTypes.INTEGER,
             allowNull : false
         },
-        description : {
-            type : DataTypes.STRING(50)
+        text : {
+            type : DataTypes.STRING(50),
+            allowNull : false
         }
     }, 
         {

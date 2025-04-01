@@ -8,7 +8,6 @@ const {sequelize }= require("./DataBase/db.js")
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const { types } = require("pg");
 
 server.name = "api";
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
@@ -33,9 +32,6 @@ const initializeApp = async () => {
     await sequelize.authenticate();
 
     await sequelize.sync({ force: true });
-
-    console.log(sequelize.models);
-    
 
     server.listen(process.env.PORT, process.env.NODE_ENV , () => {
       console.log(server.name + " is listening on port " + (process.env.PORT));

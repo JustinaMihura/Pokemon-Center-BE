@@ -1,7 +1,7 @@
 const { DataTypes} = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("MoveDamageClass" , { 
+    sequelize.define("Move_Damage_Class" , { 
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true

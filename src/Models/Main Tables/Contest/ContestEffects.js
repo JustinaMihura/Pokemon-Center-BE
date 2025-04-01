@@ -20,7 +20,8 @@ module.exports = (sequelize) => {
             allowNull: false
         },
         jam : {
-            type : DataTypes.INTEGER
+            type : DataTypes.INTEGER,
+            allowNull : false
             //? Qué tanto interfiere con otros participantes (afecta su puntuación).
         }
         }, 
