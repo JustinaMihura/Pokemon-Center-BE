@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
             type : DataTypes.STRING(20),
             allowNull : false
         },
-        // contest-type.id 1 a muchos //? los concursos usan sabores de bayas para mejorar el desempeño de los Pokémon.
+        // "✅"contest-type.id 1 a muchos //? los concursos usan sabores de bayas para mejorar el desempeño de los Pokémon.
     }, 
         {
             timestamps : false

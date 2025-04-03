@@ -30,7 +30,7 @@ const initializeApp = async () => {
   try {
 
     await sequelize.authenticate();
-
+   
     await sequelize.sync({ force: true });
 
     server.listen(process.env.PORT, process.env.NODE_ENV , () => {

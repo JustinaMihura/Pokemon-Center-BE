@@ -1,7 +1,7 @@
 const { DataTypes} = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("IVs" , { 
+    sequelize.define("Characteristics_IVs" , { 
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true
@@ -10,17 +10,16 @@ module.exports = (sequelize) => {
             type : DataTypes.STRING(20),
             allowNull : false
         },
-        descriptions : {
-            type : DataTypes.STRING(50),
-            allowNull : false
+        gene_modulo : {
+            //? residuo que tiene que tener
+            type : DataTypes.INTEGER
         },
         possible_values : {
-            type : DataTypes.ARRAY(DataTypes.INTEGER)
-        },
-        gene_modulo : {
-            type : DataTypes.INTEGER
+            //?Posible values del IV´s 
+            type : DataTypes.ARRAY(DataTypes.INTEGER), //* STRING o JSON 
+            allowNull : false
         }
-        //highest_stat = stat.id 
+        //"✅"highest_stat = stat.id 
     }, 
         {
             timestamps : false

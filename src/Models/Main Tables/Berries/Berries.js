@@ -42,10 +42,10 @@ module.exports = (sequelize) => {
             type : DataTypes.INTEGER,
             allowNull : false
         }
-        // type.id //? Tipo que se le da con Natural Gift 
-        //item.id 1 a muchos //? Es el ítem que el jugador puede obtener en los juegos.
-        //firmness. id 1 a muchos //? firmeza
-      //flavor.id muchos a muchos = potency:INTEGER + berries.id + flavor.id //? Sabores y Potencia 
+        // "✅"type.id //? Tipo que se le da con Natural Gift 
+        //"✅"item.id 1 a muchos //? Es el ítem que el jugador puede obtener en los juegos.
+        //"✅"firmness. id 1 a muchos //? firmeza
+      //"✅"flavor.id muchos a muchos = potency:INTEGER + berries.id + flavor.id //? Sabores y Potencia 
     } , 
         {
             timestamps : false            

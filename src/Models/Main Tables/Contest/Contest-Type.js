@@ -4,7 +4,7 @@ module.exports = (sequelize) => {
     sequelize.define("Contest_Type" , {
         id : {
             type : DataTypes.INTEGER,
-            primartyKey : true
+            primaryKey : true
         },
         name : {
             type : DataTypes.STRING(15),

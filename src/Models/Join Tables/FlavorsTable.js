@@ -1,17 +1,13 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("Flavor_text_entries" , {
+    sequelize.define("Flavors_Join_Table" , {
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true
         },
-        flavor_text : {
-            type : DataTypes.STRING(50),
-            allowNull : false
-        },
-        langueage : {
-            type : DataTypes.ENUM('en' , 'es'),
+        potency : { 
+            type : DataTypes.INTEGER,
             allowNull : false
         }
         

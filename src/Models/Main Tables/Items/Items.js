@@ -1,5 +1,6 @@
 const {DataTypes} = require("sequelize");
 
+
 module.exports = (sequelize) =>  {
 
     sequelize.define("Items" , {
@@ -11,9 +12,16 @@ module.exports = (sequelize) =>  {
             type : DataTypes.STRING(50),
             allowNull : false
         },
+        
         baby_trigger_for : {
-            type : DataTypes.BOOLEAN,
-            allowNull : true
+            type: DataTypes.INTEGER,
+            allowNull: true,  // Permite valores nulos
+            references: {
+                model: "Evolution_Chains",
+                key: "id"
+                },
+            onUpdate: "CASCADE",
+            onDelete: "SET NULL"
         },
         cost : {
             type : DataTypes.INTEGER
@@ -25,17 +33,17 @@ module.exports = (sequelize) =>  {
             type : DataTypes.INTEGER,
             allowNull : true 
         }
-        //held-by-pokemon.id -> Tabla intermedia = 
+        //"✅"held-by-pokemon.id -> Tabla intermedia = 
                                 // pokemon.id + version-detail(tabla inermedia ) = 
                                                 // rarity + version.id
-        //machines.id
+        //"✅"machines.id
 
-        //effect-entries.id -> effect , effect-short
-        //category-item.id
-        //flavor-text ->  tabla inermedia  = 
+        //"✅"effect-entries.id -> effect , effect-short
+        //"✅"category-item.id
+        //"✅"flavor-text ->  tabla inermedia  = 
                             //verion-group.id + text 
-        //attributes.id (n:n)
-        //fling-effect.id (1 a 1) allowNull true
+        //"✅"attributes.id (n:n)
+        //"✅"fling-effect.id (1 a 1) allowNull true
         //game_indexes.id = tabla intermedia = 
                             //* game_index + generation.id
         //

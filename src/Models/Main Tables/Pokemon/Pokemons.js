@@ -47,9 +47,8 @@ module.exports = (database) => {
                             //* abilities + is_hidden + slot
         //"✅"cries.id legacy (1era salida) latest (ultima)
 
-        //? PREFIERO QUE ME MUESTRE EL INDICE DE LA POKEDEXES ATRAVES DE SPECIES 
-        //! gameindexes.id = tabla intermedia =   
-         //!                   //*game_index + version.id
+        //"✅" gameindexes.id = tabla intermedia =   
+         //                   //*game_index + version.id
          
         //"✅"held_items = tabla intermedia = 
                             //* item.id + version details.id =

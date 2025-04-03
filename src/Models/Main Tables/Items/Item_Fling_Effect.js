@@ -2,7 +2,7 @@ const {DataTypes} = require("sequelize");
 
 module.exports = (sequelize) =>  {
 
-    sequelize.define("Fling-Effect" , {
+    sequelize.define("Item_Fling_Effect" , { //? Efecto cuando se usa Lanzamiento(Move) 
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true
