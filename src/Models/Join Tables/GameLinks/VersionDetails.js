@@ -11,6 +11,10 @@ module.exports = (sequelize) => {
        rarity : {//! For Items
         type : DataTypes.INTEGER,
         allowNull : true
+       },
+       rate : { //! For Method
+        type : DataTypes.INTEGER,
+        allowNull : true
        }
     }, {
         timestamps : false

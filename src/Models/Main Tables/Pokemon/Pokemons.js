@@ -15,23 +15,29 @@ module.exports = (database) => {
         },
         base_experience : { 
             type : DataTypes.INTEGER,
+            allowNull : false
         },
         height : {
-            type : DataTypes.INTEGER
+            type : DataTypes.INTEGER,
+            allowNull : false
         },
         weight : { 
-            type : DataTypes.INTEGER
+            type : DataTypes.INTEGER,
+            allowNull : false
         
         },
         is_default : {
             //! true = forma base ; false = shiny o forma regional
-            type : DataTypes.BOOLEAN
+            type : DataTypes.BOOLEAN,
+            allowNull : false
         },
         imgFront : { //!official-artwork
-            type : DataTypes.STRING(100)
+            type : DataTypes.STRING(100),
+            allowNull : false
         },
         imgShiny : {//!official-artwork
-            type : DataTypes.STRING(100)
+            type : DataTypes.STRING(100),
+            allowNull : false
         },
         legacy_cry : {
             type : DataTypes.STRING(100),

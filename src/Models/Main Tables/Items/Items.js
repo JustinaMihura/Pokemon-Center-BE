@@ -12,7 +12,7 @@ module.exports = (sequelize) =>  {
             type : DataTypes.STRING(50),
             allowNull : false
         },
-        
+
         baby_trigger_for : {
             type: DataTypes.INTEGER,
             allowNull: true,  // Permite valores nulos
@@ -24,10 +24,12 @@ module.exports = (sequelize) =>  {
             onDelete: "SET NULL"
         },
         cost : {
-            type : DataTypes.INTEGER
+            type : DataTypes.INTEGER,
+            allowNull : false
         },
         img : {
-            type : DataTypes.STRING(100)
+            type : DataTypes.STRING(100),
+            allowNull : false
         },
         fling_power : {
             type : DataTypes.INTEGER,

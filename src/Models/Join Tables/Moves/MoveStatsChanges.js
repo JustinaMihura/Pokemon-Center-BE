@@ -12,7 +12,11 @@ module.exports = (sequelize) => {
         change : {
             type : DataTypes.INTEGER,
             allowNull : false
-        }
+        },
+        effectType: {
+            type: DataTypes.ENUM('increase', 'decrease'),
+            allowNull: false
+          }
     }, 
     {
         timestamps : false

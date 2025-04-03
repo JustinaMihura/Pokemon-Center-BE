@@ -12,7 +12,11 @@ module.exports = (sequelize) => {
             allowNull : false,
             unique : true
         },
-       
+        img : {
+            type : DataTypes.STRING(100),
+            allowNull : false
+        }
+        
     }, 
     {
         timestamps : false

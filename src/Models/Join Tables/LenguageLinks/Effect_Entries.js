@@ -11,7 +11,11 @@ module.exports = (sequelize) => {
         effects : {
             type : DataTypes.STRING(50),
             allowNull : false
-        }
+        },
+         short_effect : {
+            type : DataTypes.STRING(20),
+            allowNull : true
+         }
     } , 
         {
             timestamps : false
