@@ -13,8 +13,8 @@ module.exports = (sequelize) => {
             unique : true
         },
         img : {
-            type : DataTypes.STRING(100),
-            allowNull : false
+            type : DataTypes.STRING(200),
+            allowNull : true
         }
         
     }, 

@@ -13,23 +13,15 @@ module.exports = (sequelize) => {
         },
         accuracy : {
             type : DataTypes.INTEGER,
-            allowNull : false
+            allowNull : true
         },
         pp : {
             type : DataTypes.INTEGER,
-            allowNull : false
-        },
-        short_text : {
-            type : DataTypes.STRING(30),
-            allowNull : false
-        },
-        text : {
-            type : DataTypes.STRING(60),
             allowNull : true
         },
         power : {
             type : DataTypes.INTEGER,
-            allowNull : false
+            allowNull : true
         },
         effect_chance : {
             type : DataTypes.INTEGER,

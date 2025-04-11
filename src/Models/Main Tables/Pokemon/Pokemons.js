@@ -32,19 +32,19 @@ module.exports = (database) => {
             allowNull : false
         },
         imgFront : { //!official-artwork
-            type : DataTypes.STRING(100),
+            type : DataTypes.STRING(150),
             allowNull : false
         },
         imgShiny : {//!official-artwork
-            type : DataTypes.STRING(100),
-            allowNull : false
+            type : DataTypes.STRING(150),
+            allowNull : true
         },
         legacy_cry : {
-            type : DataTypes.STRING(100),
-            allowNull : false
+            type : DataTypes.STRING(150),
+            allowNull : true
         },
         latest_cry : {
-            type : DataTypes.STRING(100),
+            type : DataTypes.STRING(150),
             allowNull : true
         },
 

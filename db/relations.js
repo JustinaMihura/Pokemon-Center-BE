@@ -565,7 +565,7 @@ Pokemon.belongsToMany(Types, {
     through : Pokemon_Encounters,
     foreignKey : "locations_areas_id",
     otherKey : "pokemon_id",
-    as : "pokemon_enounters"
+    as : "pokemon_encounters"
   });
 
   Locations_Areas.belongsToMany(Encounter_Methods, {
@@ -603,11 +603,11 @@ Pokemon.belongsToMany(Types, {
  
   
   Version_Details.hasMany(Pokemon_Encounters, { 
-    foreignKey: 'pokemon_encounter_id'
+    foreignKey: 'version_detail_id'
    });
 
   Pokemon_Encounters.belongsTo(Version_Details, { 
-    foreignKey: 'pokemon_encounter_id' 
+    foreignKey: 'version_detail_id' 
   });
 
   Version_Details.hasMany(Encounter_Details, { 

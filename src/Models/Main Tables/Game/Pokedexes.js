@@ -11,9 +11,7 @@ module.exports = (sequelize) =>  {
             type : DataTypes.STRING(50),
             allowNull : false
         },
-        descriptions : {
-            type : DataTypes.STRING(100)    
-        },
+       
         is_main_series : {
             type : DataTypes.BOOLEAN,
             alowNull : false

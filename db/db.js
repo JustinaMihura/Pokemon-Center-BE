@@ -7,7 +7,8 @@ const {PG_USERNAME , PG_PASSWORD,NODE_ENV, DB_NAME, DB_PORT} = process.env;
 
 const sequelize = new Sequelize(
   `postgres://${PG_USERNAME}:${PG_PASSWORD}@${NODE_ENV}:${DB_PORT}/${DB_NAME}`,{
-    logging: console.log, 
+    logging: false
+    , 
   });
   
   
@@ -16,6 +17,6 @@ const sequelize = new Sequelize(
  
 
 module.exports = {
-    sequelize
-  
+    sequelize,
+    ...sequelize.models
 }

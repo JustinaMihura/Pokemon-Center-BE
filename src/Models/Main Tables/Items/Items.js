@@ -25,11 +25,11 @@ module.exports = (sequelize) =>  {
         },
         cost : {
             type : DataTypes.INTEGER,
-            allowNull : false
+            allowNull : true
         },
         img : {
-            type : DataTypes.STRING(100),
-            allowNull : false
+            type : DataTypes.STRING(150),
+            allowNull : true
         },
         fling_power : {
             type : DataTypes.INTEGER,

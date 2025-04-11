@@ -1,0 +1,186 @@
+
+//?__Por ERRORES de la PokeApi preferi usar un bulce for of para hacer fn asincronicas lineales -
+//? y no en paralelo como con Promise.All(). Hay abilidades repetidas en pokemons y por ende se rompe la bd.
+//?__ Por cuestione e seguridad y futuros erroes en la ata prefieron sacrificar tiempo de espera y realizar las consultas linealmente.
+
+
+const axios = require("axios");
+const {sequelize} = require("../../db/db.js");
+require("dotenv").config();
+
+const {Types , Pokemon, Abilities, Pokemons_Types , Pokemon_Abilities, Moves, Pokemons_Moves, Stats , Pokemon_Stats,Items,Held_Items,Past_Abilities, Past_Types , Versions, Game_Indices, Locations_Areas, Pokemon_Encounters} = sequelize.models;
+const {BASEURL} = process.env;
+
+
+module.exports = async (pokemon_relations) => {
+    
+    try{
+
+        console.time("Pokemon_Relations db ✅ --> time ");
+
+        //*___Metodos posibles para el modelo Pokemon____________
+
+        const instance_method = await Pokemon.findByPk(1);
+        console.dir(Object.getOwnPropertyNames(Object.getPrototypeOf(instance_method)), {
+            maxArrayLength: null
+          });
+        //*______________________________________________________
+
+        await Pokemons_Types.destroy({where : {}});
+        await  Pokemon_Abilities.destroy({where : {}});
+        await Pokemons_Moves.destroy({where : {}});
+        await Pokemon_Stats.destroy({where : {}});
+        await Held_Items.destroy({where : {}});
+        await Game_Indices.destroy({where : {}});
+        await Pokemon_Encounters.destroy({where : {}})
+          
+        const pokemons = await Promise.all(pokemon_relations.map(async e => {
+
+        const poke_by_id = await Pokemon.findByPk(e.id);
+
+        //---------------- Pokemon_Types------------------------------------------
+        for(const t of e.types) {
+
+            const type = await Types.findOne({where : {
+                name : t.type.name
+            }});
+
+            const alreadyExists = await poke_by_id.hasCurrentType(type); 
+
+            if(!alreadyExists) {
+                await poke_by_id.addCurrentTypes(type,  {
+                    through: {
+                        slot : t.slot  
+                    }});
+                }
+        };
+            
+        //----------------Pokemon_Abilitites--------------------------------------
+        for(const a of e.abilities){
+
+            const ability = await Abilities.findOne({where : {
+                name : a.ability.name
+            }});
+
+            if (!ability) continue;
+            const alreadyExists = await poke_by_id.hasAbility(ability);
+
+            if (!alreadyExists) {
+            await poke_by_id.addAbility(ability, {
+                through: {
+                slot: a.slot,
+                is_hidden: a.is_hidden
+                }
+            })};
+        }
+        //----------------Pokemon_Moves-------------------------------------------
+        for(const m of e.moves) {
+            const move = await Moves.findOne({where : {
+                name : m.move.name
+            }});
+            if (!move) continue;
+            const alreadyExist = await poke_by_id.hasMove(move);
+
+            if(!alreadyExist) {
+                await poke_by_id.addMove(move);
+            }
+        };
+        //---------------Pokemon_Stats-------------------------------------------
+        for (const s of e.stats) {
+            const stats = await Stats.findOne({where : {
+                name : s.stat.name
+            }});
+
+            if(!stats) continue;
+            const alreadyExist = await poke_by_id.hasStat(stats);
+
+            if(!alreadyExist) {
+                await poke_by_id.addStat(stats, {
+                    through : {
+                        base_stat : s.base_stat,
+                        effort : s.effort,
+                    }
+                })
+            };
+        };
+        //----------------Held_Items---------------------------------------------
+        //! Agregar version_details relations despues
+        if(e.held_items){
+            
+            for(const i of e.held_items) {
+                const item = await Items.findOne({where : {
+                    name : i.item.name
+                }});
+                
+                if(item) {
+                    const alreadyExist = await poke_by_id.hasHeld_item(item);
+    
+                    if(!alreadyExist) {
+                        await poke_by_id.addHeld_item(item)
+                    }
+                }
+            };
+        };
+        //---------------------Game_Indices--------------------------------------
+         if(e.game_indices) {
+
+            for(const p of e.game_indices) {
+                
+                    const version = await Versions.findOne({where : {
+                        name : p.version.name
+                    }});
+
+                    if(version) {
+                        const alreadyExist = await poke_by_id.hasGame_index(version);
+                        if(!alreadyExist) {
+                            await poke_by_id.addGame_index(version, {
+                                through : {
+                                    game_index : p.game_index
+                                }
+                            });
+                        };
+                    }
+            }};
+            //----------------------Encounters----------------------------------------
+            //! Agregar version_details relations despues -> encounter-detail id + version.id  
+            if(e.location_area_encounters){
+
+                const {data} = await axios.get(e.location_area_encounters);
+
+                for(const l of data) {
+                    const locations = await Locations_Areas.findOne({where : {
+                        name : l.location_area.name
+                    }});
+                    
+                    if(!locations) continue;
+
+                    const alreadyExist = await Pokemon_Encounters.findOne({
+                        where: {
+                            pokemon_id: poke_by_id.id,
+                            locations_areas_id: locations.id,
+                        },
+                    });
+
+                    if(!alreadyExist) {
+                        await Pokemon_Encounters.create({
+                            pokemon_id: poke_by_id.id,
+                            locations_areas_id: locations.id,
+                        })
+                    };
+                }
+                    
+            };
+            //---------------------Past_Types-----------------------------------
+           
+            //---------------------Past_Abilitites------------------------------
+           
+            //---------------------Species--------------------------------------
+               
+        })); 
+        console.timeEnd("Pokemon_Relations db ✅ --> time ")
+
+    } catch (error) {
+        console.error({"pokemon_relations error" : error});
+    }
+ };
+ 
