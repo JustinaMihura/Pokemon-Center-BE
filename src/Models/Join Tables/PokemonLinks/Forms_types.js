@@ -2,15 +2,16 @@ const { DataTypes} = require("sequelize")
 
 module.exports = (sequelize) => {
 
-    sequelize.define("Pokemons_Types" , {
+    sequelize.define("Forms_Types" , {
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true,
-            autoIncrement : true
+            autoIncrement: true
         },
         slot : {
-            type : DataTypes.INTEGER
-        }, 
+            type : DataTypes.INTEGER,
+            allowNull : false
+        }
     }, {
         timestamps : false
     },

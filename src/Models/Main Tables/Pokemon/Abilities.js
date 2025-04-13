@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
         },
         name : {
             type : DataTypes.STRING(20),
-            allowNull : false
+            allowNull : true
         },
         is_main_series : {
             type : DataTypes.BOOLEAN,

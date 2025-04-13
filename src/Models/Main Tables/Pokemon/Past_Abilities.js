@@ -3,11 +3,11 @@ const {DataTypes} = require("sequelize");
 
 module.exports = (sequelize) => {
 
-    sequelize.define("Past_Types" , {
+    sequelize.define("Past_Abilities" , {
         id : {
-            type : DataTypes.INTEGER,
-            primaryKey : true,
-            autoincrement : true
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true 
         }
     }, 
     {

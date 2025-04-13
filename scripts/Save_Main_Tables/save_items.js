@@ -2,21 +2,26 @@ const axios = require("axios");
 require("dotenv").config();
 const {sequelize} = require("../../db/db.js");
 const batching = require("../batching_fn.js");
+const plimit = require("p-limit").default;
+
 
 const {BASEURL} = process.env;
 const {Items} = sequelize.models;
 
 module.exports = async () => {
+
     try {
+
         console.time("Items db ✅ --> time :")
         const {data} = await axios(`${BASEURL}item/?offset=0&limit=2180`);
         const slice_urls = batching(data.results.map(e => e.url));
         const items = [];
         let last_valid_id;
+        const limit = plimit(10);
 
         for (let i = 0; i < slice_urls.length; i++) {
             const element = slice_urls[i];
-            const data = await Promise.all(element.map(e => axios.get(e)))
+            const data = await Promise.all(element.map(e => limit(() =>axios.get(e))))
 
             data.map(i => {
 

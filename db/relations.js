@@ -84,7 +84,9 @@ module.exports = (sequelize) => {
         Effect_Changes,
         Regions,
         Encounter_Method_Rate,
-        Damage_Relations
+        Damage_Relations,
+        Forms,
+        Forms_Types
        } = sequelize.models;
 
 
@@ -122,20 +124,16 @@ Pokemon.belongsToMany(Types, {
   });
   
   Pokemon.belongsTo(Species, {foreignKey : "species_id"})
-  Species.hasMany(Pokemon,  {foreignKey : "species_id"})
+  Species.hasMany(Pokemon, { foreignKey: "species_id" });
   
-  Pokemon.belongsToMany(Types, {
-    through: Past_Types,
-    foreignKey: 'type_id',
-    otherKey: 'pokemon_id',
-    as: 'past_types',
+  Pokemon.hasMany(Past_Types, { foreignKey: 'pokemon_id' });
+  Past_Types.belongsTo(Pokemon, { foreignKey: 'pokemon_id' });
+
+  Past_Types.belongsTo(Pokemons_Types, {
+    foreignKey: 'pokemon_type_id'
   });
-  
-  Types.belongsToMany(Pokemon, {
-    through: Past_Types,
-    foreignKey: 'pokemon_id',
-    otherKey: 'type_id',
-    as: 'Pokemon_with_it',
+  Pokemons_Types.hasMany(Past_Types, {
+    foreignKey: 'pokemon_type_id'
   });
   
   Generations.hasMany(Past_Types, { foreignKey: 'generation_id' });
@@ -155,46 +153,66 @@ Pokemon.belongsToMany(Types, {
     as : "Pokemon indices"
   });
 
+  Pokemon.hasMany(Forms, { foreignKey: 'pokemon_id' });
+  Forms.belongsTo(Pokemon, { foreignKey: 'pokemon_id' });
   
-  //?__________________________________- Abilities -_______________________________________________________________________________________________
-  
-  Pokemon.belongsToMany(Abilities , {
-    through : Pokemon_Abilities,
-    foreignKey : "pokemon_id",
-    otherKey : "abilities_id",
-    as : "abilities"
-   });
-  
-  Abilities.belongsToMany(Pokemon, {
-    through : Pokemon_Abilities,
-    foreignKey : "abilities_id",
-    otherKey : "pokemon_id",
-    as : "pokemon"
+  Forms.belongsToMany(Types, {
+    through: Forms_Types,
+    foreignKey: 'form_id',
+    otherKey: 'type_id',
+    as: 'Types',
   });
   
-  Pokemon.belongsToMany(Abilities, {
-     through: Past_Abilities,
-      foreignKey: 'past_pokemon_id',
-      otherKey : "past_abilities_id",
-      as: 'past_abilities',
-    });
-    
-    Abilities.belongsToMany(Pokemon, {
-      through: Past_Abilities,
-      foreignKey: 'past_ability_id',
-      otherKey : "past_pokemon_id",
-      as  : "pokemons_who_have_it"
-    });
-    
-    Past_Abilities.belongsTo(Generations, {
-      foreignKey: 'generationId',
-      as: 'generation',
-    });
+  Types.belongsToMany(Forms, {
+    through: Forms_Types,
+    foreignKey: 'type_id',
+    otherKey: 'form_id',
+  });
   
-    Generations.hasMany(Past_Abilities, {
-      foreignKey: 'generationId',
-      as: 'abilities',
-    });
+  Forms.belongsTo(Version_Groups , {foreignKey : "version_group_id"});
+
+
+  //?__________________________________- Abilities -_______________________________________________________________________________________________
+  Pokemon.belongsToMany(Abilities, {
+    through: Pokemon_Abilities,
+    foreignKey: 'pokemon_id',
+    otherKey: 'abilities_id',
+    as: 'abilities'
+  });
+  
+  Abilities.belongsToMany(Pokemon, {
+    through: Pokemon_Abilities,
+    foreignKey: 'abilities_id',
+    otherKey: 'pokemon_id',
+    as: 'pokemon'
+  });
+  
+  Pokemon.hasMany(Past_Abilities, {
+    foreignKey: 'pokemon_id',
+    as: 'past_abilities'
+  });
+  
+  Past_Abilities.belongsTo(Pokemon, {
+    foreignKey: 'pokemon_id'
+  });
+  
+  Past_Abilities.belongsTo(Pokemon_Abilities, {
+    foreignKey: 'pokemon_abilities_id',
+  });
+
+  Pokemon_Abilities.hasMany(Past_Abilities , {
+    foreignKey : 'pokemon_abilities_id',
+  })
+  
+  Past_Abilities.belongsTo(Generations, {
+    foreignKey: 'generation_id',
+    as: 'generation'
+  });
+  
+  Generations.hasMany(Past_Abilities, {
+    foreignKey: 'generation_id',
+    as: 'past_abilities'
+  });
   
     Abilities.belongsTo(Generations, {
       foreignKey : "generation_id"

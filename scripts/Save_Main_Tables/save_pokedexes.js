@@ -1,7 +1,7 @@
 const axios = require("axios");
 const {sequelize} = require("../../db/db.js");
 require("dotenv").config();
-
+const pLimit = require("p-limit").default;
 const {BASEURL} = process.env;
 const {Pokedexes} = sequelize.models;
 
@@ -13,19 +13,19 @@ module.exports = async () => {
             throw new Error("La API no devolvió resultados válidos.");
         };
         await Pokedexes.destroy({where : {}});
-        const response = await Promise.all(data.results.map(e => axios(e)));
-
+        const limit = pLimit(10)
+        
+        const response = await Promise.all(data.results.map(e => limit(() => axios(e))));
+        
         if(response) {
-            
-            await Promise.all(
-                response.map(p =>
+          
+          response.forEach(p =>
                   Pokedexes.create({
                     name: p.data.name,
                     id: p.data.id,
                     is_main_series: p.data.is_main_series
                   })
                 )
-              );
         } 
         console.timeEnd("Pokedexes db ✅ --> time :");
         

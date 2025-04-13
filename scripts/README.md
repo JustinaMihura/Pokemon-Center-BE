@@ -23,6 +23,8 @@ Aunque el "Lazy fetch" era buena opcion para mi caso (por el poco trafico de per
  //? Logica por bloques (batching);;
 //? Separar las url por bloques de 50 para no saturar la api. Procesar las urls y luego guardar todos los pokemons en un array
 //? Poner temporizador para no saturar la Api.
+//*p-limit para mejorar la conexion en las llamadas a la Api.
 
 
-//*-----------ERRORES DE LA API------------------------
+//?        peticiones ==> [batching (rapidez) , limit (estable) ] 
+

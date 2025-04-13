@@ -3,6 +3,7 @@
 const axios = require("axios");
 const {sequelize} = require("../../db/db.js")
 require("dotenv").config()
+const pLimit = require("p-limit").default;
 
 const {BASEURL} = process.env
 const {Types} = sequelize.models;
@@ -18,6 +19,7 @@ module.exports = async () => {
         const response = await Promise.all(data.results.map(e => axios(e.url)));
         const types = [];
         let last_valid_id = 0;
+        const limit = pLimit(10);
 
         await Types.destroy({where : {}});
 

@@ -3,14 +3,14 @@ const axios = require("axios");
 require("dotenv").config();
 const batching = require("../batching_fn.js")
 const {sequelize} = require("../../db/db.js");
-
+const pLimit = require("p-limit").default;
 
 const {Pokemon} = sequelize.models
 const {BASEURL} = process.env;
 
 
 module.exports = async () => {
-
+    
     try {
         console.time("Pokemon db ✅ --> time :");
         const {data} = await axios.get(`${BASEURL}pokemon/?offset=0&limit=1302`);
@@ -23,13 +23,14 @@ module.exports = async () => {
         let pokemons = [];
         let pokemon_relations = [];
         let last_valid_id = 0; 
+        const limit = pLimit(10);
 
         await Pokemon.destroy({where : {}});
         
             for (let i = 0; i < slice_urls.length; i++) {
 
                 const element = slice_urls[i];
-                const data = await Promise.all(element.map(e => axios.get(e)));
+                const data = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
                 data.map(e => {
                     

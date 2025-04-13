@@ -9,64 +9,52 @@ module.exports = (sequelize) => {
         },
         name : {
             type : DataTypes.STRING(30),
-            allowNull : false,
-            unique : true
+            allowNull : false
+            
         },
         is_baby : {
             type : DataTypes.BOOLEAN,
-            allowNull : false
+            allowNull : true
         },
-        is_legenadary : {
+        is_legendary : {
             type : DataTypes.BOOLEAN,
-            allowNull : false
+            allowNull : true
         },
         is_mythical : {
             type : DataTypes.BOOLEAN, 
-            allowNull : false
+            allowNull : true
         },
         base_happiness : {
             type : DataTypes.INTEGER,
-            allowNull : false
+            allowNull : true
         
         }, 
         hatch_counter : {
             //Número de ciclos necesarios para eclosionar un huevo
             type : DataTypes.INTEGER,
-            allowNull : false
+            allowNull : true
         },
         capture_rate : {
             //Probabilidad de captura del Pokémon.
             type : DataTypes.INTEGER,
-            allowNull : false
+            allowNull : true
         },
-        evolves_from_species : {
+      
+        forms_switchable : {
+            //?Pueden cambiar durante el juego.
             type : DataTypes.BOOLEAN,
             allowNull : true
-        },
-        flavorDescrip : {
-            type : DataTypes.STRING(50)
-        },
-        form_description : {
-            //?Algunos Pokémon tienen formas alternativas que pueden variar en aspectos como su apariencia o sus estadísticas
-            type : DataTypes.STRING(40),
-            allowNull : true
-        },
-        form_switcheable : {
-            //?Pueden cambiar durante el juego.
-            type : DataTypes.BOOLEAN
         },
         gender_rate : {
             //? del 0 al 8. 0 (sin genero y 8 (50% hembra/macho)) // 1 mas prob de ser macho
                                                                   //? 7 mas prob de ser hembra 
-            type : DataTypes.INTEGER
+            type : DataTypes.INTEGER,
+            allowNull : true
         }, 
-        genera : {
-            //? Clasificacion o Genero
-            type : DataTypes.STRING(20)
-        },
+       
         has_gender_differences : {
             type : DataTypes.BOOLEAN,
-            allowNull : false
+            allowNull : true
         },
 
 

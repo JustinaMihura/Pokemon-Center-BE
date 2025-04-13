@@ -1,6 +1,7 @@
 const axios = require("axios");
 const {sequelize} = require("../../db/db.js");
 const batching = require("../batching_fn.js");
+const pLimit = require("p-limit").default;
 require("dotenv").config();
 
 const {Locations_Areas} = sequelize.models;
@@ -12,19 +13,20 @@ module.exports = async () => {
     try {
         console.time("Locations_Areas db ✅ --> time")
          const {data} = await axios.get(`${BASEURL}location-area/?offset=0&limit=1089`);
-         let location_areas = [];
-
+         
          if (!data || !data.results || data.results.length === 0) {
-            throw new Error("La API no devolvió resultados válidos.");
-        };
-
+             throw new Error("La API no devolvió resultados válidos.");
+            };
+            
         const slice_urls = batching(data.results.map(e => e.url), 50)
+        let location_areas = [];
+        const limit = pLimit(10);
         await Locations_Areas.destroy({where : {}});
 
        for (let i = 0; i < slice_urls.length; i++) {
             const element = slice_urls[i];
 
-            const response = await Promise.all(element.map(e => axios.get(e)));
+           const response = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
             if(response) {
                  response.map(l => {

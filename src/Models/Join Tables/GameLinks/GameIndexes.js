@@ -8,7 +8,11 @@ module.exports = (sequelize) => {
         type : DataTypes.INTEGER,
         allowNull : true
        },
-       
+       id : {
+          type : DataTypes.INTEGER,
+          primaryKey : true , 
+          autoIncrement : true
+       }
     }, {
         timestamps : false
     },
