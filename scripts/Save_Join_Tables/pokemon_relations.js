@@ -23,10 +23,11 @@ module.exports = async (pokemon_relations) => {
         
         //*___Metodos posibles para el modelo Pokemon____________
         
-        const instance_method = await Pokemon.findByPk(1);
-        console.dir(Object.getOwnPropertyNames(Object.getPrototypeOf(instance_method)), {
-            maxArrayLength: null
-        });
+        // const instance_method = await Pokemon.findByPk(1);
+        // console.dir(Object.getOwnPropertyNames(Object.getPrototypeOf(instance_method)), {
+        //     maxArrayLength: null
+        // });
+        
         //*______________________________________________________
 
         await Pokemons_Types.destroy({where : {}});

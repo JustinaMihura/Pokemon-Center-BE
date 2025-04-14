@@ -46,7 +46,7 @@ module.exports = async () => {
                     });
 
                     species_data.push({
-
+                        id : e.data.id,
                         color : e.data.color,
                         egg_groups : e.data.egg_groups,
                         evolution_chain : e.data.evolution_chain,

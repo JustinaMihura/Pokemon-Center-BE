@@ -4,8 +4,9 @@ module.exports = (sequelize) => {
     sequelize.define("Evolves_To" , {
         id : {
             type : DataTypes.INTEGER,
-            primaryKey : true
+            primaryKey : true,
+            autoIncrement : true
         },
         
-    }, {timestamp : false})
+    }, {timestamps : false})
 };

@@ -5,7 +5,8 @@ module.exports = (sequelize) => {
     sequelize.define("Evolution_Details",{
         id : { 
             type : DataTypes.INTEGER,
-            primaryKey : true
+            primaryKey : true,
+            autoIncrement : true
         },
         min_level : { 
             type : DataTypes.INTEGER,
