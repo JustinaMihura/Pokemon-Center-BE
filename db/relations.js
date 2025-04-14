@@ -977,6 +977,16 @@ Pokemon.belongsToMany(Types, {
   Evolutions.belongsTo(Evolution_Chains, { 
     foreignKey: 'evolution_chain_id'
    })
+
+   Evolutions.belongsTo(Species, {
+    foreignKey: 'species_id',
+    as: 'species'
+  });
+  
+  Species.hasOne(Evolutions, {
+    foreignKey: 'species_id',
+    as: 'node'
+  });
     
   Evolutions.belongsToMany(Evolutions, //*----------- Node to Node
     {

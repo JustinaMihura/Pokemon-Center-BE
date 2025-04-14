@@ -11,21 +11,27 @@ const save_generations = require("./Save_Main_Tables/save_generations.js");
 const save_species = require("./Save_Main_Tables/save_species.js");
 const save_forms = require("./Save_Main_Tables/save_forms.js");
 const save_species_relations = require("./Save_Join_Tables/species_relations.js");
+const save_color = require("./Save_Main_Tables/save_color.js");
+const save_evolutions_chain = require("./Save_Main_Tables/save_evolutions_chain.js");
+const save_egg_groups = require("./Save_Main_Tables/save_eggGroups.js");
 module.exports = async () => {
 
     try {
-        const pokemons_data = await save_pokemon();
         const species_data = await save_species();
-        await save_types();
-        await save_abilitites();
-        await save_moves();
-        await save_items();
-        await save_pokedexes();
-        await save_versions();
-        await save_locations_areas();
-        await save_generations();
-        await save_forms();
-        await pokemon_relations(pokemons_data)
+        await save_evolutions_chain();
+        await save_color();
+        await save_egg_groups();
+        // const pokemons_data = await save_pokemon();
+        // await save_types();
+        // await save_abilitites();
+        // await save_moves();
+        // await save_items();
+        // await save_pokedexes();
+        // await save_versions();
+        // await save_locations_areas();
+        // await save_generations();
+        // await save_forms();
+        // await pokemon_relations(pokemons_data)
         await save_species_relations(species_data)
     } catch (error) {
         console.log(error);

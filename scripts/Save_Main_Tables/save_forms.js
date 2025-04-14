@@ -38,9 +38,9 @@ module.exports = async () => {
                         form_name : f.data.form_name,
                         form_order : f.data.form_order,
                         img_front : f.data.sprites.front_default,
-                        img_back : e.data.front_back_default,
-                        img_front_shiny : e.data.front_shiny,
-                        img_back_shiny : e.data.back_shiny
+                        img_back : f.data.front_back_default,
+                        img_front_shiny : f.data.front_shiny,
+                        img_back_shiny : f.data.back_shiny
                     })
                 }
             };
