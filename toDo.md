@@ -1,3 +1,0 @@
--EVs que dan cada pokemon
--Calculadora de cuantos EVs tiene un pokemon 
-- que pkemon dan ciertos efforts (evs) en forma de filtro para que puedan ver  que pokemon derrotar 
