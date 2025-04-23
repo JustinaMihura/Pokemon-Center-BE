@@ -23,11 +23,11 @@ module.exports = async (pokemon_relations) => {
         
         //*___Metodos posibles para el modelo Pokemon____________
         
-        // const instance_method = await Pokemon.findByPk(1);
-        // console.dir(Object.getOwnPropertyNames(Object.getPrototypeOf(instance_method)), {
-        //     maxArrayLength: null
-        // });
-        
+         const instance_method = await Pokemon.findByPk(1);
+         console.dir(Object.getOwnPropertyNames(Object.getPrototypeOf(instance_method)), {
+             maxArrayLength: null
+         });
+
         //*______________________________________________________
 
         await Pokemons_Types.destroy({where : {}});
@@ -47,28 +47,28 @@ module.exports = async (pokemon_relations) => {
 
         //---------------------Species-------------------------------------------
             
-            if(e.species && e.species.name) {
+            if(e.species) {
                 const specie = await Species.findOne({where : {
                     name : e.species.name
                 }});
-
+                
                 if(!specie) return
-            
+                
                 await poke_by_id.setSpecies(specie)
             };
 
         //----------------------Forms---------------------------------------------
 
-        if (e.forms && e.forms.length > 0) {  
+        if (e.forms && e.forms.length > 0) {
+
             for (const f of e.forms) {
                 try {
+
                     const form = await Forms.findOne({ where: { name: f.name } });
         
                     if (form) {
                         const hasForm = await poke_by_id.hasForm(form);
-                        if (!hasForm) {
-                            await poke_by_id.addForm(form);
-                        }
+                        if (!hasForm)  await poke_by_id.addForm(form);
                     }
                 } catch (error) {
                     console.error(`Error al agregar forma: ${f.name}`, error);
@@ -86,7 +86,7 @@ module.exports = async (pokemon_relations) => {
                 const alreadyExists = await poke_by_id.hasCurrentType(type); 
 
                 if(!alreadyExists) {
-                    await poke_by_id.addCurrentTypes(type,  {
+                    await poke_by_id.addCurrentType(type,  {
                         through: {
                             slot : t.slot  
                         }});

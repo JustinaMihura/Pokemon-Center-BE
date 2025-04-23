@@ -392,12 +392,12 @@ Pokemon.belongsToMany(Types, {
   Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries,
     foreignKey  : "contest_effect_id",
-    otherKey : "lengueage_id"
+    otherKey : "language_id"
   });
 
   Lengueage.belongsToMany(Contest_Effects , {
     through : Flavor_text_entries,
-    foreignKey : "lenguaege_id",
+    foreignKey : "language_id",
     otherKey : "contest_effect_id"
   });
   
@@ -439,8 +439,6 @@ Pokemon.belongsToMany(Types, {
     foreignKey : "move_damage_class_id"
   });
 
-  //* En el controlador establecer que solo guardaremos datos en la tabla "Flavor_text_entries"
-  //* Solo cuando sea en english o español. 
 
   Moves.belongsToMany(Version_Groups , {
     through : Flavor_text_entries, 
@@ -510,13 +508,13 @@ Pokemon.belongsToMany(Types, {
   Super_Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries, 
     foreignKey : "super_contest_effects_id",
-    otherKey : "lengueage_id",
+    otherKey : "language_id",
     as : "Flavor_texts"
   });
 
   Lengueage.belongsToMany(Super_Contest_Effects , {
     through : Flavor_text_entries, 
-    foreignKey : "lengueage_id",
+    foreignKey : "language_id",
     otherKey :"super_contest_effects_id",
     as : "Super_contest_effects"
   });
@@ -1174,8 +1172,30 @@ Pokemon.belongsToMany(Types, {
 
   Varieties.belongsTo(Species , {
     foreignKey : "species_id"
-  })
+  });
+
+  Species.belongsToMany(Lengueage , {
+    through : Descriptions,
+    foreignKey : "species_id",
+    otherKey : "langueage_id",
+    as : "form_descriptions"
+  });
   
+  Lengueage.belongsToMany(Species , {
+    through : Descriptions,
+    foreignKey : "langueage_id",
+    otherKey : "species_id",
+  });
+
+  Species.belongsToMany(Versions , {
+    through : Flavor_text_entries,
+    foreignKey : "species_id",
+    otherKey : "version_id",
+    as : "flavor_entries"
+  });
+
+  Flavor_text_entries.belongsTo(Lengueage ,{foreignKey : "langueage_id"});
+
 //?_________________________________________________________________________________________________________
 //?----------------------------------------------------------------------------------------------------------
 

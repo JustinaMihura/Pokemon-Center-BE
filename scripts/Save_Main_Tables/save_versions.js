@@ -2,6 +2,7 @@ const axios = require("axios");
 require("dotenv").config()
 const {sequelize} = require("../../db/db.js");
 const pLimit = require("p-limit").default;
+
 const {BASEURL} = process.env;
 const {Versions} = sequelize.models;
 
