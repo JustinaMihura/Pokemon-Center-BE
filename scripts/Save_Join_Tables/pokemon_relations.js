@@ -83,14 +83,20 @@ module.exports = async (pokemon_relations) => {
                     name : t.type.name
                 }});
 
-                const alreadyExists = await poke_by_id.hasCurrentType(type); 
+                if(type) {
+                    const alreadyExists = await Pokemons_Types.findOne({where : {
+                        pokemon_id : poke_by_id,
+                        type_id : type.id
+                }}); 
 
-                if(!alreadyExists) {
-                    await poke_by_id.addCurrentType(type,  {
-                        through: {
-                            slot : t.slot  
-                        }});
-                    }
+                    if(!alreadyExists) {
+
+                        await Pokemons_Types.create({
+                            pokemon_id : poke_by_id,
+                            type_id : type.id,
+                            slot : t.slot
+                        })
+                    }}
             };
                 
         //----------------Pokemon_Abilitites--------------------------------------
@@ -318,5 +324,5 @@ module.exports = async (pokemon_relations) => {
     } catch (error) {
         console.error({"pokemon_relations error" : error.errors  });
     }
- };
+};
  
