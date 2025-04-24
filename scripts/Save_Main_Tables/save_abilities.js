@@ -14,6 +14,7 @@ module.exports = async() => {
 
         console.time("Abilities db ✅ --> time :");
         const {data}= await axios(`${BASEURL}ability/?offset=0&limit=367`);
+
         if (!data || !data.results || data.results.length === 0) {
             throw new Error("La API no devolvió resultados válidos.");
         };
@@ -22,30 +23,38 @@ module.exports = async() => {
         const abilities = [];
         let last_valid_id = 0;
         const limit = pLimit(10)
-        await Abilities.destroy({where : {}});
         
         for (let i = 0; i < slice_urls.length; i++) {
 
             const element = slice_urls[i];
             const data = await Promise.all(element.map( async e => limit(() => axios(e))));
 
-            data.map(e => {
+            data.map(async e => {
                 
                 let abilities_id;
 
                 if(e.data.id < 10000) {
                     abilities_id = e.data.id
                     last_valid_id = abilities_id
+                    
                 } else {
+
                     abilities_id = last_valid_id + 1,
                     last_valid_id = abilities_id
                 };
                 
-                return abilities.push({
+                const exist = await Abilities.findOne({where : {
                     id : abilities_id,
-                    name : e.data.name,
-                    is_main_series : e.data.is_main_series,
+                }});
+
+                if(!exist) {
+
+                    abilities.push({
+                        id : abilities_id,
+                        name : e.data.name,
+                        is_main_series : e.data.is_main_series,
                     })
+                }
             });
 
             await new Promise(res => setTimeout(res, 500));
@@ -57,7 +66,7 @@ module.exports = async() => {
         return 
         
     } catch (error) {
-        console.error({"abilitites_error" : error});
+        console.error("abilitites_error" , error);
         
     }
 };

@@ -28,18 +28,18 @@ module.exports = async () => {
         await save_forms();                             //✅
         await save_conditions();                        //✅
         await save_conditions_values();                 //✅
-        await save_locations_areas();
-        await save_abilitites();
-        await save_versions();
-        await save_types();
-        await save_moves();
-        await save_items();
-        await save_color();                             
-        await save_egg_groups();
-        await save_lenguage();
-        // await save_pokedexes();
-        // await save_generations();
-         await pokemon_relations(pokemons_data)
+        await save_locations_areas();                   //✅
+        await save_abilitites();                        //✅
+        await save_versions();                          //✅
+        await save_types();                             //✅
+        await save_moves();                             //✅
+        await save_items();                             //✅
+        await save_color();                             //✅
+        await save_egg_groups();                        //✅
+        await save_lenguage();                          //✅
+        await save_pokedexes();                         //✅
+        await save_generations();                       //✅
+         await pokemon_relations(pokemons_data) 
         //await save_species_relations(species_data)
     } catch (error) {
         console.log(error);

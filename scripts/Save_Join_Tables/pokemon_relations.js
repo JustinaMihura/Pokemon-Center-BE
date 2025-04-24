@@ -8,13 +8,15 @@ const axios = require("axios");
 const {sequelize} = require("../../db/db.js");
 
 const { 
+    
     Types , Pokemon, Abilities, Pokemons_Types ,
     Species, Pokemon_Abilities, Moves, Pokemons_Moves,
     Stats , Pokemon_Stats,Items,Held_Items,Past_Abilities,
     Past_Types , Versions, Game_Indices, Locations_Areas,
     Pokemon_Encounters, Generations, Version_Details,Forms,
     Version_Groups,Move_Method,Version_Group_Details,Encounter_Details,
-    Encounter_Methods
+    Encounter_Methods,Conditions_Values,Encounter_Conditions_Values
+
 }   = sequelize.models;
 
 module.exports = async (pokemon_relations) => {
@@ -32,17 +34,6 @@ module.exports = async (pokemon_relations) => {
 
         //*______________________________________________________
 
-        await Pokemons_Types.destroy({where : {}});
-        await  Pokemon_Abilities.destroy({where : {}});
-        await Pokemons_Moves.destroy({where : {}});
-        await Pokemon_Stats.destroy({where : {}});
-        await Held_Items.destroy({where : {}});
-        await Game_Indices.destroy({where : {}});
-        await Pokemon_Encounters.destroy({where : {}})
-        await Past_Abilities.destroy({where : {}});
-        await Past_Types.destroy({where : {}})
-        await Version_Details.destroy({where : {}})
-        
         await Promise.all(pokemon_relations.map(async e => {
             
             const poke_by_id = await Pokemon.findByPk(e.id);
@@ -272,9 +263,9 @@ module.exports = async (pokemon_relations) => {
                             });
                         }
                 }};
-        //----------------------Encounters----------------------------------------
-                //!te quedaste aca mijita. mañanaseguis. conditions y conditions_values ya estan.
-                //!revisa save_locations_areas y modifica lo que sigueras. :D
+
+        //--------------------------------Encounters----------------------------------------
+
             if(e.location_area_encounters){
 
                 const {data} = await axios.get(e.location_area_encounters);
@@ -312,6 +303,7 @@ module.exports = async (pokemon_relations) => {
                                 max_chance : v_d.max_chance
                             }
                         }) 
+
                         if(Array.isArray(v_d.encounter_details) && v_d.encounter_details.length > 0) {
 
                             for (const encounter of v_d.encounter_details) {
@@ -320,7 +312,8 @@ module.exports = async (pokemon_relations) => {
                                 name : encounter.method.name
                                 }})
 
-                                const encounter_detail = await Encounter_Details.findOrCreate({where : {
+                                const [encounter_detail] = await Encounter_Details.findOrCreate({where : {
+
                                     version_detail_id : version_details.id,
                                     method_id : method.id
                                     },
@@ -330,15 +323,31 @@ module.exports = async (pokemon_relations) => {
                                         min_level : encounter.min_level
                                     }
                                 })
-                            }
-                        }
-                        
+
+                                if(Array.isArray(encounter.condition_values) && encounter.condition_values.length > 0) {
+
+                                    for (const c of encounter.condition_values) {
+                                    
+                                        const condition_value = await Conditions_Values.findOne({where : {
+                                            name : c.name
+                                        }});
+
+                                        if(!condition_value) continue;
+
+                                        await Encounter_Conditions_Values.create({
+                                            encounter_detail_id : encounter_detail.id,
+                                            condition_value_id : condition_value.id
+                                        });
+
+                                    }
+                                }
+                            };
+                        };
                     }
                 }
-                        
             };
-        //---------------------Past_Types-----------------------------------
-            if(e.past_types){
+        //-----------------------------------Past_Types-----------------------------------
+            if(Array.isArray(e.past_types) && e.past_types.length > 0){
                 
                 try {
 
@@ -360,87 +369,63 @@ module.exports = async (pokemon_relations) => {
                                 const [pokemon_type] = await Pokemons_Types.findOrCreate({
                                     where : {
                                         type_id : type.id,
-                                        slot : t.slot,
                                         pokemon_id : poke_by_id.id
+                                    },
+                                    defaults : {
+                                        slot : t.slot,
                                     }
                                 });
 
-                                if(pokemon_type) {
-                                     const alreadyExist = await Past_Types.findOne({
+                                await Past_Types.findOrCreate({
                                     where : {
                                         pokemon_type_id : pokemon_type.id,
                                         generation_id : gen.id,
                                         pokemon_id : poke_by_id.id
                                     }
                                 });
-
-                                if (!alreadyExist) {
-                                    
-                                    await Past_Types.create({
-                                        pokemon_type_id : pokemon_type.id,
-                                        generation_id : gen.id,
-                                        pokemon_id : poke_by_id.id
-
-                                    })
-                                }
-                                }
                             }
                         }}
-
 
                 } catch (error) {
                         console.error({"pokemon_Past_Type_relation error " : error});
                         
                 }
-
-                   
-            }
+            };
         //---------------------Past_Abilitites(history abilities)------------------------------
-            if(e.past_abilities) {
+
+            if(Array.isArray(e.past_abilities) && e.past_abilities.length > 0) {
                
                     for(const pa of e.past_abilities) {
                         
                     const gen = await Generations.findOne({where : {
                         name : pa.generation.name
                     }})
-                    if(!gen) continue;
 
                     for(const a of pa.abilities) {
-                        const abilityName = a.ability?.name;
-                        if (!abilityName) continue;
 
-                        const ability = await Abilities.findOne({where : {
+                        const abilityName = !a.ability?.name ? "unknown" : a.ability.name;
+                        
+                        const [ability] = await Abilities.findOrCreate({where : {
                             name : abilityName
                         }});
 
-                        if(!ability) continue; 
-
                         const [poke_ability] = await Pokemon_Abilities.findOrCreate({where : {
-                            slot : a.slot,
-                            is_hidden : a.is_hidden,
-                            pokemon_id: poke_by_id.id,
-                            abilities_id : ability.id
-                        }});
+                            abilities_id : ability.id,
+                            pokemon_id: poke_by_id.id},
+                            defaults : {
+                                slot : a.slot,
+                                is_hidden : a.is_hidden,
+                            }
+                        });
 
-                        const alreadyExist = await Past_Abilities.findOne({where : {
+                        await Past_Abilities.findOrCreate({where : {
                             pokemon_abilities_id : poke_ability.id,
                             pokemon_id : poke_by_id.id,
                             generation_id : gen.id
                         }});
-                        
-                        if(!alreadyExist) {
-                        await Past_Abilities.create({
-                            pokemon_id : poke_by_id.id,
-                            pokemon_abilities_id : poke_ability.id,
-                            generation_id : gen.id
-                            })
-                        }
                     }
                 }
-           
             }   
-
-               
         })); 
         console.timeEnd("Pokemon_Relations db ✅ --> time ")
 

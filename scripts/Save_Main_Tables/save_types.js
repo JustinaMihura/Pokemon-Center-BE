@@ -21,9 +21,7 @@ module.exports = async () => {
         let last_valid_id = 0;
         const limit = pLimit(10);
 
-        await Types.destroy({where : {}});
-
-        response.map(e => {
+        response.map(async e => {
             let type_id;
 
             if (e.data.id < 10000) {
@@ -35,13 +33,19 @@ module.exports = async () => {
                 last_valid_id = type_id;     
             }
 
-            return types.push({
-                name : e.data.name,
+            const exist = await Types.findOne({where : {
                 id : type_id,
-                img : e.data.sprites?.["generation-vi"]?.["x-y"].name_icon ||
-                      e.data.sprites?.["generation-vii"]?.["sun-moon"].name_icon ||
-                      e.data.sprites?.["generation-ix"]?.["scarlet-violet"].name_icon || null
-            })
+            }});
+
+            if(!exist) {
+                types.push({
+                    name : e.data.name,
+                    id : type_id,
+                    img : e.data.sprites?.["generation-vi"]?.["x-y"].name_icon ||
+                          e.data.sprites?.["generation-vii"]?.["sun-moon"].name_icon ||
+                          e.data.sprites?.["generation-ix"]?.["scarlet-violet"].name_icon || null
+                })
+            } 
         });                                                                  
 
         await Types.bulkCreate(types);

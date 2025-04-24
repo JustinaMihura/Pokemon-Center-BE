@@ -13,23 +13,22 @@ module.exports = async () => {
         
         
         if(data) {
+
             const generations = await Promise.all(data.results.map(e => {
                return axios.get(e.url)
             }));
 
-
-            await Generations.destroy({where : {}});
-
             if(generations) {
                 
-                
                     for (const g of generations) {
-                        await Generations.create({
+
+                        await Generations.findOrCreate({where : {
                             id: g.data.id,
+                        }, defaults : {
                             name: g.data.name
+                        }
                         });
                     }
-                
             }
         }
         console.timeEnd("Generations db ✅ --> time ");

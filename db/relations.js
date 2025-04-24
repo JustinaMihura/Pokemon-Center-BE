@@ -654,16 +654,15 @@ Pokemon.belongsToMany(Types, {
   
   Encounter_Details.belongsToMany(Conditions_Values, {
     through : Encounter_Conditions_Values ,
-     foreignKey : "encounter_details_id",
-     otherKey : "conditions_values_id",
-     as : "conditions_values"
+     foreignKey : "encounter_detail_id",
+     otherKey : "condition_value_id",
+     as : "Condition"
     });
 
   Conditions_Values.belongsToMany(Encounter_Details, {
     through : Encounter_Conditions_Values ,
-     foreignKey : "conditions_values_id",
-     otherKey : "encounter_details_id",
-     as : "encounters_details"
+     foreignKey : "condition_value_id",
+     otherKey : "encounter_detail_id",
     });
 
 

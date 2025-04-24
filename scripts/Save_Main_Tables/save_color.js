@@ -11,23 +11,31 @@ module.exports = async () => {
 
         console.time("Color db ✅ --> time ");
         const {data} = await axios.get(`${BASEURL}pokemon-color/`);
+        const colors = []
 
         if (!data || !data.results || data.results.length === 0) {
             throw new Error("La API no devolvió resultados válidos.");
            };
-        await Colors.destroy({where : {}});
+
         const response = await Promise.all(data.results.map(e => axios.get(e.url)));
 
         if(response && response.length > 0){
             
             for (const color of response) {
 
-                    await Colors.create({
-                        id : color.data.id,
-                        name : color.data.name
-                    });
+                const exist = await Colors.findOne({where : {
+                    id : color.data.id,
+                }});
+
+                if(!exist) {
+                   colors.push({
+                       id : color.data.id,
+                       name : color.data.name
+                   });
+                }
             }
-        };  
+        };
+        await Colors.bulkCreate(colors)  
         console.timeEnd("Color db ✅ --> time ")
 
     } catch (error) {

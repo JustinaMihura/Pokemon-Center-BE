@@ -21,7 +21,6 @@ module.exports = async () => {
         const slice_urls = batching(data.results.map(e => e.url), 50)
         let location_areas = [];
         const limit = pLimit(10);
-        await Locations_Areas.destroy({where : {}});
 
        for (let i = 0; i < slice_urls.length; i++) {
             const element = slice_urls[i];
@@ -29,12 +28,31 @@ module.exports = async () => {
            const response = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
             if(response) {
-                 response.map(l => {
-                    return location_areas.push({
+                 response.map(async l => {
+
+                    const exist = await Locations_Areas.findOne({where : {
                         name : l.data.name,
-                        id : l.data.id,
-                        game_index : l.data.game_index
-                    })
+                    }})
+
+                    if(!exist) {
+                        
+                        location_areas.push({
+                            name : l.data.name,
+                            id : l.data.id,
+                            game_index : l.data.game_index
+                        })
+                    } else if (
+
+                        exist && 
+                        l.data.game_index &&
+                        l.data.game_index !== exist.game_index 
+                    ){
+                        location_areas.push({
+                            name : l.data.name,
+                            id : l.data.id,
+                            game_index : l.data.game_index
+                        })
+                    }
                 })
             }
 

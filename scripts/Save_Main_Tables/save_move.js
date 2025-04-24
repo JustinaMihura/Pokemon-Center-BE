@@ -19,15 +19,16 @@ module.exports =  async () => {
         const slice_urls = batching(data.results.map(e => e.url), 50);
         let last_valid_id = 0;
         const moves = [];
+        const fields = ['pp', 'effect_chance','power','accuracy', 'priority'];
+        const update = {};
         const limit = pLimit(10);
-        await Moves.destroy({where : {}});
         
         for (let i = 0; i < slice_urls.length; i++) {
 
             const element = slice_urls[i];
            const data = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
-            data.map(m => {
+            data.map( async m => {
 
                 if(m.data.id < 10000){
                     last_valid_id = m.data.id
@@ -35,15 +36,35 @@ module.exports =  async () => {
                     last_valid_id = last_valid_id + 1
                 };
 
-                return moves.push({
-                    name : m.data.name,
+                const exist = await Moves.findOne({where : {
                     id : last_valid_id,
-                    accuracy : m.data.accuracy,
-                    effect_chance : m.data.effect_chance,
-                    power : m.data.power,
-                    priority : m.data.priority,
-                    pp : m.data.pp,
-                });
+                }});
+
+                if(!exist) {
+                    moves.push({
+                        name : m.data.name,
+                        id : last_valid_id,
+                        accuracy : m.data.accuracy,
+                        effect_chance : m.data.effect_chance,
+                        power : m.data.power,
+                        priority : m.data.priority,
+                        pp : m.data.pp,
+                    });
+                };
+
+                for (const fields of fields) {
+                    if(
+                        m.data[fields] &&
+                        m.data[fields] !== exist[fields]
+                    ) {
+                        update[fields] = m.data[fields]
+                    }
+                };
+
+                if(Object.keys(update).length > 0) {
+                    await Moves.update(update)
+                };
+               
             });
 
             await new Promise(res => setTimeout(res, 500));
