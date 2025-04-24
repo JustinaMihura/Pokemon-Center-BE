@@ -14,11 +14,34 @@ module.exports = (sequelize) => {
         slot : {
             type : DataTypes.INTEGER,
             allowNull : false
-        }
-        // contest-type.id 1 a muchos //? los concursos usan sabores de bayas para mejorar el desempeño de los Pokémon.
+        },
+        pokemon_id : {
+            type : DataTypes.INTEGER,
+            allowNull : false,
+            references : {
+                model : "Pokemons",
+                key : "id"
+            }
+        },
+        ability_id : {
+            type : DataTypes.INTEGER,
+            allowNull : false,
+            references : {
+                model : "Abilities",
+                key : "id"
+            }
+        },
+        // contest-type.id 1 a muchos 
+        //? los concursos usan sabores de bayas para mejorar el desempeño de los Pokémon.
     }, 
         {
-            timestamps : false
+            timestamps : false,
+            indexes: [
+                {
+                  unique: true, 
+                  fields: ['pokemon_id', 'ability_id'] 
+                }
+              ]
         }
     )
 }

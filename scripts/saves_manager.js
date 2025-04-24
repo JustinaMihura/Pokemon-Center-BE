@@ -14,25 +14,33 @@ const save_species_relations = require("./Save_Join_Tables/species_relations.js"
 const save_color = require("./Save_Main_Tables/save_color.js");
 const save_evolutions_chain = require("./Save_Main_Tables/save_evolutions_chain.js");
 const save_egg_groups = require("./Save_Main_Tables/save_eggGroups.js");
+const save_lenguage = require("./Save_Main_Tables/save lengueage.js");
+const save_conditions = require("./Save_Main_Tables/save_conditions.js")
+const save_conditions_values = require("./Save_Main_Tables/save_conditions_values.js")
+
 module.exports = async () => {
 
-    try {
-        const species_data = await save_species();
-        await save_evolutions_chain();
-        await save_color();
+    try {                                               //-------------Mejorando script ------------//
+                                                        // (optimizacion con bulkCreate y verificacion de data)
+        //const species_data = await save_species();    //
+        const pokemons_data = await save_pokemon();     //✅
+        await save_evolutions_chain();                  //✅
+        await save_forms();                             //✅
+        await save_conditions();                        //✅
+        await save_conditions_values();                 //✅
+        await save_locations_areas();
+        await save_abilitites();
+        await save_versions();
+        await save_types();
+        await save_moves();
+        await save_items();
+        await save_color();                             
         await save_egg_groups();
-        // const pokemons_data = await save_pokemon();
-        // await save_types();
-        // await save_abilitites();
-        // await save_moves();
-        // await save_items();
+        await save_lenguage();
         // await save_pokedexes();
-        // await save_versions();
-        // await save_locations_areas();
         // await save_generations();
-        // await save_forms();
-        // await pokemon_relations(pokemons_data)
-        await save_species_relations(species_data)
+         await pokemon_relations(pokemons_data)
+        //await save_species_relations(species_data)
     } catch (error) {
         console.log(error);
         

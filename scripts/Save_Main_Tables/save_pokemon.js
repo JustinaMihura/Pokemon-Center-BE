@@ -25,31 +25,39 @@ module.exports = async () => {
         let last_valid_id = 0; 
         const limit = pLimit(10);
 
-        await Pokemon.destroy({where : {}});
-        
             for (let i = 0; i < slice_urls.length; i++) {
 
                 const element = slice_urls[i];
                 const data = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
-                data.map(e => {
+
+                for (const e of data){
                     
-                    let pokemon_id;
+                    let pokemon_id; 
+                    const compare = ["base_experience", "height", "weight", "is_default", "legacy_cry", "latest_cry"];
 
-                //-- la PokeApi tiene errores de guardado en los id de lo ultimos registros
-                //-- por ende los arreglamo aqui para que sea mas seguro y eficiente.
-
+                    //-- la PokeApi tiene errores de guardado en los id de lo ultimos registros
+                    //-- por ende los arreglamos aqui para que sea mas seguro y eficiente el guardado.
+                    
                     if (e.data.id < 10000) {
                         pokemon_id = e.data.id;
                         last_valid_id = pokemon_id;  
-
+                        
                     } else {
-
+                        
                         pokemon_id = last_valid_id + 1; 
                         last_valid_id = pokemon_id;  
-                    }
+                    };
+                    
+                    const poke = await Pokemon.findOne({where : {
+                         id : pokemon_id,
+                         name: e.data.name, 
+                     }});
 
-                      pokemons.push({
+                    //-- Comparación de data de ambos lados (si existe en db)
+                    //Verficando previamente si los valores no son null, undefined o diferente a data de la BD.
+
+                    const compare_data = {
                         
                             name: e.data.name,
                             id: pokemon_id,
@@ -72,9 +80,29 @@ module.exports = async () => {
                             legacy_cry : e.data.cries?.["legacy"],
                             latest_cry : e.data.cries?.["latest"]
 
-                            });
+                            };
+
+                            if(poke) {
+
+                                const hasChange = compare.some(attr => (
+                                    
+                                    compare_data[attr] !== null &&
+                                    compare_data[attr] !== undefined &&
+                                    compare_data[attr] !== poke[attr]
+                                ));
                         
-                        pokemon_relations.push({
+                                if (hasChange) await poke.update(compare_data);
+                                
+                            } else {
+
+                                pokemons.push(compare_data);
+                            };
+                    
+                //  guardar la data extraida de la Api en esta variable para luego retornarla con la funcion.         
+                //  Lo hago para evitar nuevas calls a la Api buscando la misma informacion.
+                //  Ademas para evitar errores de guardado por temas de jerarquia. (los saves de Types y Pokemons tienen que ser cargados previamente a la carga del save de pokemons_relations
+                
+                            pokemon_relations.push({
 
                             id : pokemon_id,
                             types : e.data.types,
@@ -88,21 +116,19 @@ module.exports = async () => {
                             past_types : e.data.past_types || [],
                             species : e.data.species,
                             stats : e.data.stats,
+
                         });
-
-                    return
-
-                });
-
-                await new Promise(res => setTimeout(res, 500));
+                };
+                    await new Promise(res => setTimeout(res, 1000));
             };
-                    
-            await Pokemon.bulkCreate(pokemons);
+
+            if (pokemons.length > 0) await Pokemon.bulkCreate(pokemons);
+            
             console.timeEnd("Pokemon db ✅ --> time :")
             return pokemon_relations;
 
     } catch (error) {
-            console.log({"Pokemon_Model" : error})
+            console.error("Pokemon db error" ,error)
         }
 };
 

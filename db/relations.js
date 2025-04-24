@@ -392,12 +392,12 @@ Pokemon.belongsToMany(Types, {
   Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries,
     foreignKey  : "contest_effect_id",
-    otherKey : "lengueage_id"
+    otherKey : "language_id"
   });
 
   Lengueage.belongsToMany(Contest_Effects , {
     through : Flavor_text_entries,
-    foreignKey : "lenguaege_id",
+    foreignKey : "language_id",
     otherKey : "contest_effect_id"
   });
   
@@ -439,8 +439,6 @@ Pokemon.belongsToMany(Types, {
     foreignKey : "move_damage_class_id"
   });
 
-  //* En el controlador establecer que solo guardaremos datos en la tabla "Flavor_text_entries"
-  //* Solo cuando sea en english o español. 
 
   Moves.belongsToMany(Version_Groups , {
     through : Flavor_text_entries, 
@@ -510,13 +508,13 @@ Pokemon.belongsToMany(Types, {
   Super_Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries, 
     foreignKey : "super_contest_effects_id",
-    otherKey : "lengueage_id",
+    otherKey : "language_id",
     as : "Flavor_texts"
   });
 
   Lengueage.belongsToMany(Super_Contest_Effects , {
     through : Flavor_text_entries, 
-    foreignKey : "lengueage_id",
+    foreignKey : "language_id",
     otherKey :"super_contest_effects_id",
     as : "Super_contest_effects"
   });
@@ -575,13 +573,13 @@ Pokemon.belongsToMany(Types, {
   Pokemon.belongsToMany(Locations_Areas, {
     through : Pokemon_Encounters,
     foreignKey : "pokemon_id",
-    otherKey : "locations_areas_id",
+    otherKey : "location_area_id",
     as : "encounters_areas"
   });
 
   Locations_Areas.belongsToMany(Pokemon, {
     through : Pokemon_Encounters,
-    foreignKey : "locations_areas_id",
+    foreignKey : "location_area_id",
     otherKey : "pokemon_id",
     as : "pokemon_encounters"
   });
@@ -621,11 +619,11 @@ Pokemon.belongsToMany(Types, {
  
   
   Version_Details.hasMany(Pokemon_Encounters, { 
-    foreignKey: 'version_detail_id'
+    foreignKey: 'pokemon_encounter_id'
    });
 
   Pokemon_Encounters.belongsTo(Version_Details, { 
-    foreignKey: 'version_detail_id' 
+    foreignKey: 'pokemon_encounter_id' 
   });
 
   Version_Details.hasMany(Encounter_Details, { 
@@ -638,20 +636,21 @@ Pokemon.belongsToMany(Types, {
   });
   
   Encounter_Details.belongsTo(Encounter_Methods, { 
-    foreignKey: 'encounter_method_id' 
+    foreignKey: 'method_id' 
   });
 
   Encounter_Methods.hasMany(Encounter_Details, { 
-    foreignKey: 'encounter_method_id' 
+    foreignKey: 'method_id' 
   });
     
   Conditions.hasMany(Conditions_Values, {
-    foreignKey : "conditions_id"
+    foreignKey : "condition_id"
   });
 
   Conditions_Values.belongsTo(Conditions,{
-    foreignKey : "conditions_id"
-  })
+    foreignKey : "condition_id",
+    as : "Condition"
+  });
   
   Encounter_Details.belongsToMany(Conditions_Values, {
     through : Encounter_Conditions_Values ,
@@ -674,23 +673,23 @@ Pokemon.belongsToMany(Types, {
   Pokemon.belongsToMany(Items, {
     through : Held_Items,
     foreignKey : "pokemon_id",
-    otherKey : "held_items_id",
+    otherKey : "item_id",
     as : "held_items"
   });
 
   Items.belongsToMany(Pokemon, {
     through : Held_Items,
-    foreignKey : "items_id",
+    foreignKey : "item_id",
     otherKey : "pokemon_id",
     as  : "pokemon_who_hold_it"
   });
   
   Version_Details.belongsTo(Held_Items, {
-    foreignKey : "version_detail_id"
+    foreignKey : "held_item_id"
   });
 
   Held_Items.hasMany(Version_Details, {
-    foreignKey : "version_detail_id"
+    foreignKey : "held_item_id"
   });
 
   Items.belongsToMany(Item_Attributes, {
@@ -1174,8 +1173,30 @@ Pokemon.belongsToMany(Types, {
 
   Varieties.belongsTo(Species , {
     foreignKey : "species_id"
-  })
+  });
+
+  Species.belongsToMany(Lengueage , {
+    through : Descriptions,
+    foreignKey : "species_id",
+    otherKey : "langueage_id",
+    as : "form_descriptions"
+  });
   
+  Lengueage.belongsToMany(Species , {
+    through : Descriptions,
+    foreignKey : "langueage_id",
+    otherKey : "species_id",
+  });
+
+  Species.belongsToMany(Versions , {
+    through : Flavor_text_entries,
+    foreignKey : "species_id",
+    otherKey : "version_id",
+    as : "flavor_entries"
+  });
+
+  Flavor_text_entries.belongsTo(Lengueage ,{foreignKey : "langueage_id"});
+
 //?_________________________________________________________________________________________________________
 //?----------------------------------------------------------------------------------------------------------
 

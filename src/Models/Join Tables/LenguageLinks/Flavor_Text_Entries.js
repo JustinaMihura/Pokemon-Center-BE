@@ -4,10 +4,11 @@ module.exports = (sequelize) => {
     sequelize.define("Flavor_text_entries" , {
         id : {
             type : DataTypes.INTEGER,
-            primaryKey : true
+            primaryKey : true,
+            autoIncrement : true
         },
         flavor_text : {
-            type : DataTypes.STRING(50),
+            type : DataTypes.STRING(200),
             allowNull : false
         },
       

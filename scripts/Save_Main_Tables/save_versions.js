@@ -2,6 +2,7 @@ const axios = require("axios");
 require("dotenv").config()
 const {sequelize} = require("../../db/db.js");
 const pLimit = require("p-limit").default;
+
 const {BASEURL} = process.env;
 const {Versions} = sequelize.models;
 
@@ -16,7 +17,6 @@ module.exports = async () => {
         };
         
         const limit = pLimit(10);
-        await Versions.destroy({where : {}});
         
         const response = await Promise.all(data.results.map(e => limit(() => axios.get(e.url))));
         

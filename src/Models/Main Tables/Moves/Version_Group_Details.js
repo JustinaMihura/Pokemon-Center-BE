@@ -8,8 +8,23 @@ module.exports = (sequelize) => {
         allowNull : true
        },
        
+       pokemon_move_id : {
+        type : DataTypes.INTEGER,
+        allowNull : true,
+        references : {
+            model : "Pokemon_Moves",
+            key : "id"
+        }
+       }
+       
     }, {
-        timestamps : false
+        timestamps : false,
+        indexes: [
+            {
+              unique: true, 
+              fields: ['pokemon_move_id'] 
+            }
+          ]
     },
     {timestamps : false}
 )
