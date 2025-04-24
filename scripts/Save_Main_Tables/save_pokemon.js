@@ -37,7 +37,7 @@ module.exports = async () => {
                     const compare = ["base_experience", "height", "weight", "is_default", "legacy_cry", "latest_cry"];
 
                     //-- la PokeApi tiene errores de guardado en los id de lo ultimos registros
-                    //-- por ende los arreglamo aqui para que sea mas seguro y eficiente.
+                    //-- por ende los arreglamos aqui para que sea mas seguro y eficiente el guardado.
                     
                     if (e.data.id < 10000) {
                         pokemon_id = e.data.id;
@@ -53,6 +53,9 @@ module.exports = async () => {
                          id : pokemon_id,
                          name: e.data.name, 
                      }});
+
+                    //-- Comparación de data de ambos lados (si existe en db)
+                    //Verficando previamente si los valores no son null, undefined o diferente a data de la BD.
 
                     const compare_data = {
                         
@@ -95,7 +98,10 @@ module.exports = async () => {
                                 pokemons.push(compare_data);
                             };
                     
-                        
+                //  guardar la data extraida de la Api en esta variable para luego retornarla con la funcion.         
+                //  Lo hago para evitar nuevas calls a la Api buscando la misma informacion.
+                //  Ademas para evitar errores de guardado por temas de jerarquia. (los saves de Types y Pokemons tienen que ser cargados previamente a la carga del save de pokemons_relations
+                
                             pokemon_relations.push({
 
                             id : pokemon_id,

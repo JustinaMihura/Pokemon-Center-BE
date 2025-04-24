@@ -573,13 +573,13 @@ Pokemon.belongsToMany(Types, {
   Pokemon.belongsToMany(Locations_Areas, {
     through : Pokemon_Encounters,
     foreignKey : "pokemon_id",
-    otherKey : "locations_areas_id",
+    otherKey : "location_area_id",
     as : "encounters_areas"
   });
 
   Locations_Areas.belongsToMany(Pokemon, {
     through : Pokemon_Encounters,
-    foreignKey : "locations_areas_id",
+    foreignKey : "location_area_id",
     otherKey : "pokemon_id",
     as : "pokemon_encounters"
   });
@@ -619,11 +619,11 @@ Pokemon.belongsToMany(Types, {
  
   
   Version_Details.hasMany(Pokemon_Encounters, { 
-    foreignKey: 'version_detail_id'
+    foreignKey: 'pokemon_encounter_id'
    });
 
   Pokemon_Encounters.belongsTo(Version_Details, { 
-    foreignKey: 'version_detail_id' 
+    foreignKey: 'pokemon_encounter_id' 
   });
 
   Version_Details.hasMany(Encounter_Details, { 
@@ -636,20 +636,21 @@ Pokemon.belongsToMany(Types, {
   });
   
   Encounter_Details.belongsTo(Encounter_Methods, { 
-    foreignKey: 'encounter_method_id' 
+    foreignKey: 'method_id' 
   });
 
   Encounter_Methods.hasMany(Encounter_Details, { 
-    foreignKey: 'encounter_method_id' 
+    foreignKey: 'method_id' 
   });
     
   Conditions.hasMany(Conditions_Values, {
-    foreignKey : "conditions_id"
+    foreignKey : "condition_id"
   });
 
   Conditions_Values.belongsTo(Conditions,{
-    foreignKey : "conditions_id"
-  })
+    foreignKey : "condition_id",
+    as : "Condition"
+  });
   
   Encounter_Details.belongsToMany(Conditions_Values, {
     through : Encounter_Conditions_Values ,
@@ -672,23 +673,23 @@ Pokemon.belongsToMany(Types, {
   Pokemon.belongsToMany(Items, {
     through : Held_Items,
     foreignKey : "pokemon_id",
-    otherKey : "held_items_id",
+    otherKey : "item_id",
     as : "held_items"
   });
 
   Items.belongsToMany(Pokemon, {
     through : Held_Items,
-    foreignKey : "items_id",
+    foreignKey : "item_id",
     otherKey : "pokemon_id",
     as  : "pokemon_who_hold_it"
   });
   
   Version_Details.belongsTo(Held_Items, {
-    foreignKey : "version_detail_id"
+    foreignKey : "held_item_id"
   });
 
   Held_Items.hasMany(Version_Details, {
-    foreignKey : "version_detail_id"
+    foreignKey : "held_item_id"
   });
 
   Items.belongsToMany(Item_Attributes, {

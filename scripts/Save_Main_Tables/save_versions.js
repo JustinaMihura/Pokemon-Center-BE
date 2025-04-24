@@ -17,7 +17,6 @@ module.exports = async () => {
         };
         
         const limit = pLimit(10);
-        await Versions.destroy({where : {}});
         
         const response = await Promise.all(data.results.map(e => limit(() => axios.get(e.url))));
         
