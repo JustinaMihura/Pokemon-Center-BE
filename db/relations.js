@@ -524,7 +524,7 @@ Pokemon.belongsToMany(Types, {
 
   Locations.hasMany(Locations_Areas, {
     foreignKey : "locations_areas_id",
-    as : "areas"
+    as : "Areas"
   });
 
   Locations_Areas.belongsTo(Locations, {
@@ -562,7 +562,7 @@ Pokemon.belongsToMany(Types, {
 
   Locations.belongsTo(Regions , {
     foreignKey : "region_id",
-    as : "region"
+    as : "Region"
   });
 
   Regions.hasMany(Locations, {
@@ -1003,7 +1003,13 @@ Pokemon.belongsToMany(Types, {
       });
       
  //?______________________________-Evolutions_Details-___________________________________________-
-  
+   Evolutions.hasMany(Evolution_Details, {
+     foreignKey: 'evolution_id' 
+    });
+
+  Evolution_Details.belongsTo(Evolutions, {
+     foreignKey: 'evolution_id' 
+    });
   Evolution_Details.belongsTo(Items, {
     foreignKey : "item_id", 
     as : "item"
@@ -1014,12 +1020,12 @@ Pokemon.belongsToMany(Types, {
   });
   
   Evolution_Details.belongsTo(Items , {
-    foreignKey : "heldItems_id" ,
+    foreignKey : "held_items_id" ,
      as : "heldItem"
   });
 
   Items.hasMany(Evolution_Details , {
-    foreignKey : "heldItems_id"
+    foreignKey : "held_items_id"
   })
   
   Evolution_Details.belongsTo(Genders, {
@@ -1031,12 +1037,12 @@ Pokemon.belongsToMany(Types, {
   })
   
   Evolution_Details.belongsTo(Moves, {
-    foreignKey : "know_moves_id" , 
+    foreignKey : "know_move_id" , 
     as : "Know_Move"
   })
 
   Moves.hasMany(Evolution_Details, {
-    foreignKey : "know_moves_id"
+    foreignKey : "know_move_id"
   })
   
   Evolution_Details.belongsTo(Types , {
@@ -1069,11 +1075,11 @@ Pokemon.belongsToMany(Types, {
   })
   
   Evolution_Details.belongsTo(Triggers, {
-    foreignKey : "triggers_id" ,
+    foreignKey : "trigger_id" ,
      as : "trigger"
     })
   Triggers.hasMany(Evolution_Details , {
-    foreignKey : "triggers_id"
+    foreignKey : "trigger_id"
   })
   
   Evolution_Details.belongsTo(Species , {
@@ -1095,13 +1101,7 @@ Pokemon.belongsToMany(Types, {
     as : "Trade_Species"
   })
   
-  Evolutions.hasMany(Evolution_Details, {
-     foreignKey: 'evolution_id' 
-    });
-
-  Evolution_Details.belongsTo(Evolutions, {
-     foreignKey: 'evolution_id' 
-    });
+ 
       
   //?___________________________________________________________________________________________________
   
@@ -1521,12 +1521,12 @@ Lengueage.belongsToMany(Stats, {
     as : "pokedexes_trad"
   });
 
-  Encounter_Method_Rate.belongsTo(Version_Details, {
-    foreignKey : "version_details_id"
+  Encounter_Method_Rate.hasMany(Version_Details, {
+    foreignKey : "encounter_method_rate_id"
   });
 
-  Version_Details.hasMany(Encounter_Method_Rate, {
-    foreignKey : "version_details_id"
+  Version_Details.belongsTo(Encounter_Method_Rate, {
+    foreignKey : "encounter_method_rate_id"
   });
 
 

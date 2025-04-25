@@ -17,6 +17,7 @@ const save_egg_groups = require("./Save_Main_Tables/save_eggGroups.js");
 const save_lenguage = require("./Save_Main_Tables/save lengueage.js");
 const save_conditions = require("./Save_Main_Tables/save_conditions.js")
 const save_conditions_values = require("./Save_Main_Tables/save_conditions_values.js")
+const save_locations = require("./Save_Main_Tables/save_locations.js");
 
 module.exports = async () => {
 
@@ -39,7 +40,8 @@ module.exports = async () => {
         await save_lenguage();                          //✅
         await save_pokedexes();                         //✅
         await save_generations();                       //✅
-         await pokemon_relations(pokemons_data) 
+        await save_locations();                         //✅
+         await pokemon_relations(pokemons_data)         //✅
         //await save_species_relations(species_data)
     } catch (error) {
         console.log(error);

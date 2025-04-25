@@ -16,9 +16,7 @@ module.exports = async (species_data) => {
             maxArrayLength: null
         });
         //*_________________________________________________________________________________
-        await Descriptions.destroy({where : {}});
-        await Flavor_text_entries.destroy({where : {}});
-
+     
 
         await Promise.all(species_data.map( async (e) => {
             

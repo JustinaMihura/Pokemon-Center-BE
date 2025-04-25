@@ -8,6 +8,22 @@ module.exports = (sequelize) => {
             primaryKey : true,
             autoIncrement : true
         },
+        trigger_id : {
+            type :DataTypes.INTEGER,
+            allowNull : true,
+            references : {
+                model : "Triggers",
+                key : "id"
+            }
+        },
+        evolution_id : {
+            type :DataTypes.INTEGER,
+            allowNull : true,
+            references : {
+                model : "Evolutions",
+                key : "id"
+            }
+        },
         min_level : { 
             type : DataTypes.INTEGER,
             allowNull : true
@@ -36,18 +52,87 @@ module.exports = (sequelize) => {
             type : DataTypes.STRING(10),
             allowNull : true
         },
-        trade_species : {
-            type : DataTypes.STRING(30),
-            allowNull : true
-        },
+       
         turn_upside_down : {
             type : DataTypes.BOOLEAN,
             allowNull : true
-        }
+        },
+        trade_species_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Species',
+              key: 'id'
+            }
+          },
+          gender_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Genders',
+              key: 'id'
+            }
+          },
+          held_item_id : {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Item',
+              key: 'id'
+            }
+          },
+          item_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Item',
+              key: 'id'
+            }
+          },
+          known_move_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Moves',
+              key: 'id'
+            }
+          },
+          known_move_type_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Moves',
+              key: 'id'
+            }
+          },
+          location_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Locations',
+              key: 'id'
+            }
+          },
+          party_species_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Species',
+              key: 'id'
+            }
+          },
+          party_type_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+              model: 'Type',
+              key: 'id'
+            }
+          },
 
-},
-
-    {timestamps : false}
+},{
+    timestamps : false
+}
 )
 };
 
