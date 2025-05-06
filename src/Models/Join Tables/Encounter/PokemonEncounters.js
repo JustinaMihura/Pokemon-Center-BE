@@ -36,12 +36,12 @@ module.exports = (sequelize) => {
         }
     }, {
         timestamps : false,
-        indexes : [
+       /*  indexes : [
             {
                 unique: true,
                 fields : ['version_details_id','location_area_id', 'pokemon_id']
             }
-        ]
+        ] */
     },
    
 )

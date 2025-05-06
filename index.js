@@ -33,7 +33,7 @@ const initializeApp = async () => {
 
     await sequelize.authenticate();
     await sequelize.sync({ force: true });
-    await checkSaveMonthly()
+    await checkSaveMonthly() 
 
     server.listen(process.env.PORT, process.env.NODE_ENV , () => {
       console.log(server.name + " is listening on port " + (process.env.PORT));

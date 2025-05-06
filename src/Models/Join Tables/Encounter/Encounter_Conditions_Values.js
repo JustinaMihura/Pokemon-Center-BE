@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
             autoIncrement : true
         },
 
-        encounter_detail_id : {
+         encounter_detail_id : {
             type : DataTypes.INTEGER,
             allowNull : false,
             references : {
@@ -25,16 +25,16 @@ module.exports = (sequelize) => {
                 model : "Conditions_Values",
                 key : "id"
             }
-        }
+        } 
     }, 
         {
             timestamps : false,
-            indexes : [
+          /*   indexes : [
                 {
                     unique : true,
-                    fields : ['encounter_detail_id','Conditions_Values']
+                    fields : ['encounter_detail_id','condition_value_id']
                 }
-            ]
+            ] */
         })
 };
 

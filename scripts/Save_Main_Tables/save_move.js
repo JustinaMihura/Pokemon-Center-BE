@@ -18,7 +18,6 @@ module.exports =  async () => {
         
         const slice_urls = batching(data.results.map(e => e.url), 50);
         let last_valid_id = 0;
-        const moves = [];
         const fields = ['pp', 'effect_chance','power','accuracy', 'priority'];
         const update = {};
         const limit = pLimit(10);
@@ -28,20 +27,21 @@ module.exports =  async () => {
             const element = slice_urls[i];
            const data = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
-            data.map( async m => {
-
+            for (const m of data) {
+                
                 if(m.data.id < 10000){
                     last_valid_id = m.data.id
                 } else {
                     last_valid_id = last_valid_id + 1
                 };
 
-                const exist = await Moves.findOne({where : {
+                let exist = await Moves.findOne({where : {
                     id : last_valid_id,
                 }});
 
                 if(!exist) {
-                    moves.push({
+
+                    exist = await Moves.create({
                         name : m.data.name,
                         id : last_valid_id,
                         accuracy : m.data.accuracy,
@@ -49,28 +49,25 @@ module.exports =  async () => {
                         power : m.data.power,
                         priority : m.data.priority,
                         pp : m.data.pp,
-                    });
+                    })
                 };
 
-                for (const fields of fields) {
+                for (const field of fields) {
                     if(
-                        m.data[fields] &&
-                        m.data[fields] !== exist[fields]
+                        m.data[field] &&
+                        m.data[field] !== exist[field]
                     ) {
-                        update[fields] = m.data[fields]
+                        update[field] = m.data[field]
                     }
                 };
 
                 if(Object.keys(update).length > 0) {
-                    await Moves.update(update)
+                    await exist.update(update)
                 };
-               
-            });
-
+            };
             await new Promise(res => setTimeout(res, 500));
         };
 
-    await Moves.bulkCreate(moves);
     console.timeEnd("Moves db ✅ --> time :");
 
     return

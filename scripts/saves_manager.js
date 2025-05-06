@@ -18,13 +18,17 @@ const save_lenguage = require("./Save_Main_Tables/save lengueage.js");
 const save_conditions = require("./Save_Main_Tables/save_conditions.js")
 const save_conditions_values = require("./Save_Main_Tables/save_conditions_values.js")
 const save_locations = require("./Save_Main_Tables/save_locations.js");
+const save_triggers = require("./Save_Main_Tables/save_triggers.js");
+const save_encounter_method = require("./Save_Main_Tables/save_encounter_method.js");
 
 module.exports = async () => {
 
     try {                                               //-------------Mejorando script ------------//
                                                         // (optimizacion con bulkCreate y verificacion de data)
-        //const species_data = await save_species();    //
+        const species_data = await save_species();    //
         const pokemons_data = await save_pokemon();     //✅
+        await save_triggers();                          //✅
+        await save_encounter_method();                  //✅
         await save_evolutions_chain();                  //✅
         await save_forms();                             //✅
         await save_conditions();                        //✅

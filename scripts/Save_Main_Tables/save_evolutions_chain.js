@@ -30,8 +30,9 @@ module.exports = async () => {
             for (const chain of response) {
 
 
-                const echain = await Evolution_Chains.findOrCreate({
+                const [echain] = await Evolution_Chains.findOrCreate({where : {
                     id : chain.data.id
+                }
                 });
 
                 //*--Recursion para crear un Arbol N-ario (un arbol binario con 0 a mas de 2 hijos por nodo);
@@ -55,18 +56,11 @@ module.exports = async () => {
                                 evolution_chain_id : echain.id
                             }});
 
-                            if(current_node) {
-
-                                if(node.is_baby !== current_node.is_baby) {
-                                    await Evolutions.update({is_baby : node.is_baby})
-                                };
-
-                            } else {
-
+                            if(!current_node) {
                                 current_node = await Evolutions.create({     //?---- nodo raiz (root node)
-                                species_id : specie.id,
-                                is_baby : node.is_baby,
-                                evolution_chain_id : echain.id
+                                    species_id : specie.id,
+                                    is_baby : node.is_baby,
+                                    evolution_chain_id : echain.id
                                 });
                             };
                         
@@ -104,7 +98,7 @@ module.exports = async () => {
                                         });
                                     }
                                 
-                                //--------------------------Attributes-----------------------------------
+                                            //------------Attributes---------//
 
                                     const gender = await Genders.findOne({where : {
                                         name : detail.gender
@@ -117,6 +111,7 @@ module.exports = async () => {
                                     const held_item = await Items.findOne({where : {
                                         name : detail.held_item.name
                                     }});
+
                                     held_item &&
                                     held_item.id !== exist.held_item.id
                                     ? update.held_item = held_item : null;
@@ -132,6 +127,7 @@ module.exports = async () => {
                                     const known_move = await Moves.findOne({where : {
                                         name : detail.known_move.name
                                     }});
+
                                     known_move &&
                                     known_move.id !== exist.known_move.id
                                     ? update.known_move = known_move : null;
@@ -139,6 +135,7 @@ module.exports = async () => {
                                     const known_move_type = await Types.findOne({where : {
                                         name : detail.known_type.name
                                     }});
+
                                     known_move_type &&
                                     known_move_type.id !== exist.known_move_type.id
                                     ? update.known_move_type = known_move_type : null ;
@@ -192,9 +189,10 @@ module.exports = async () => {
                         //-------------------------------------------------------------------------------------
                             if(from) {
                                     
-                                await Evolves_To.findOrCreate({            //?----- Puente (Link)
+                                await Evolves_To.findOrCreate({where : {    //?----- Puente (Link)
                                     from_species_id : from.id,
                                     to_species_id : current_node.id
+                                }            
                                 });
 
                             };

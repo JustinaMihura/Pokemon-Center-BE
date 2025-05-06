@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
             type : DataTypes.INTEGER,
             allowNull : false,
             references : {
-                model : "Pokemon_Types",
+                model : "Pokemons_Types",
                 key : "id"
             }
         },
@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
             type : DataTypes.INTEGER,
             allowNull : false,
             references : {
-                model : "Generations",
+                model : "Pokemons",
                 key : "id"
             }
         }
@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
         indexes : [
             {
                 unique : true,
-                fields : [' pokemon_id ','generation_id', 'pokemon_type_id']
+                fields : ['pokemon_id','generation_id', 'pokemon_type_id']
             }
         ]
     }

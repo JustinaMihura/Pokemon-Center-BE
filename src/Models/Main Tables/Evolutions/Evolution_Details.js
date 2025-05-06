@@ -77,7 +77,7 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-              model: 'Item',
+              model: 'Items',
               key: 'id'
             }
           },
@@ -85,7 +85,7 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-              model: 'Item',
+              model: 'Items',
               key: 'id'
             }
           },
@@ -101,7 +101,7 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-              model: 'Moves',
+              model: 'Types',
               key: 'id'
             }
           },
@@ -125,7 +125,7 @@ module.exports = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-              model: 'Type',
+              model: 'Types',
               key: 'id'
             }
           },

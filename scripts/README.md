@@ -3,7 +3,7 @@
 
 Esta carpeta sera utilizada para contener todos lo script modulares de las tablas principales de la PokeApi y mi DB.
 
-Se basan en llamar a la Api cada semana cronologicamente(momentos de poco a nulo uso de la aplicacion) y comparar la data cargada con la de mi BD. 
+Se basan en llamar a la Api cada mes cronologicamente(momentos de poco a nulo uso de la aplicacion) y comparar la data cargada con la de mi BD. 
     - Si hay nueva data, se crearan lo nuevos registros automaticamente.
     -Si hay nueva data PERO esta contiene nuevos atributos o relaciones que no se encuentran en los modelos de la DB,
     se me informara (o a la persona encargada del mismo) de dicho ERROR para proceder a actualizar los modelo manualmente.
@@ -26,5 +26,5 @@ Aunque el "Lazy fetch" era buena opcion para mi caso (por el poco trafico de per
 //*p-limit para mejorar la conexion en las llamadas a la Api.
 
 
-//?        peticiones ==> [batching (rapidez) , limit (estable) ] 
+//?        peticiones ==> [ batching (rapidez) , limit (estabiliad) ] 
 

@@ -23,7 +23,7 @@ module.exports = async () => {
         for (let i = 0; i < slice_urls.length; i++) {
             const element = slice_urls[i];
 
-            const response = await Promise.all(element.map(e => limit(() => axios.get(e.url))));
+            const response = await Promise.all(element.map(e => limit(() => axios.get(e))));
              if(response) {
 
                 for(const v of response){

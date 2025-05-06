@@ -108,7 +108,7 @@ module.exports = async (pokemon_relations) => {
                 if (!ability) continue;
                 const alreadyExists = await Pokemon_Abilities.findOne({where : {
                     pokemon_id : poke_by_id.id,
-                    ability_id : ability.id
+                    abilities_id : ability.id
                 }});
 
                 if (!alreadyExists) {
@@ -117,7 +117,7 @@ module.exports = async (pokemon_relations) => {
                         slot: a.slot,
                         is_hidden: a.is_hidden,
                         pokemon_id : poke_by_id.id,
-                        ability_id : ability.id
+                        abilities_id : ability.id
                     })
                 }};
             }
@@ -430,7 +430,7 @@ module.exports = async (pokemon_relations) => {
         console.timeEnd("Pokemon_Relations db ✅ --> time ")
 
     } catch (error) {
-        console.error({"pokemon_relations error" : error.errors  });
+        console.error("pokemon_relations error" , error  );
     }
 };
  

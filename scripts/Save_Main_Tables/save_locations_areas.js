@@ -11,6 +11,8 @@ const {BASEURL} = process.env;
 module. exports = async () => {
 
     try {
+
+
         console.time("Locations_Areas db ✅ --> time")
          const {data} = await axios.get(`${BASEURL}location-area/?offset=0&limit=1089`);
          
@@ -55,8 +57,8 @@ module. exports = async () => {
                         name : l.data.location.name
                     }});
 
-                    const l_exist = await exist.getLocation()
-                    if(!l_exist) await exist.setLocation(location);
+                    const l_exist = await exist.getLocations()
+                    if(!l_exist) await exist.setLocations(location);
 
                     for (const encounter of l.data.encounter_method_rates) {
 
@@ -92,7 +94,6 @@ module. exports = async () => {
         await new Promise(res => setTimeout(res, 500))
        };
 
-       await Locations_Areas.bulkCreate(location_areas);
        console.timeEnd("Locations_Areas db ✅ --> time")
 
     } catch (error) {

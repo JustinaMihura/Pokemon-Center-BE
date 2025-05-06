@@ -15,7 +15,6 @@ module.exports = async () => {
         console.time("Items db ✅ --> time :")
         const {data} = await axios(`${BASEURL}item/?offset=0&limit=2180`);
         const slice_urls = batching(data.results.map(e => e.url));
-        const items = [];
         let last_valid_id;
         const fields = ['baby_trigger_for','cost','fling_power'];
         const update = {};
@@ -26,20 +25,19 @@ module.exports = async () => {
 
             const data = await Promise.all(element.map(e => limit(() =>axios.get(e))))
 
-            data.map(async i => {
-
+            for (const i of data) {
                 if(i.data.id < 10000) {
                     last_valid_id = i.data.id
                 }else{
                     last_valid_id = last_valid_id + 1
                 };
 
-                const exist = await Items.findOne({where : {
+                let exist = await Items.findOne({where : {
                     id : last_valid_id
                 }});
 
                 if(!exist) {
-                    items.push({
+                    exist = Items.create({
                         name : i.data.name,
                         id : last_valid_id,
                         baby_trigger_for : i.data.baby_trigger_for,
@@ -59,13 +57,11 @@ module.exports = async () => {
                     };
     
                     if(Object.keys(update).length > 0) {
-                        await Items.update(update)
+                        await exist.update(update)
                     };
                 };
-                return items
-            })
+            }
         };
-        await Items.bulkCreate(items);
         console.timeEnd("Items db ✅ --> time :");
         
     } catch (error) {

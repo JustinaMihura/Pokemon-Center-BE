@@ -3,15 +3,15 @@ require("dotenv").config();
 const {sequelize} = require("../../db/db");
 
 const {BASEURL} = process.env;
-const {Egg_Groups} = sequelize.models;
+const {Triggers} = sequelize.models;
 
 module.exports = async () => {
 
     try {
 
-        console.time("Egg_Groups db ✅ --> time ");
-        const {data} = await axios.get(`${BASEURL}egg-group/`);
-        const egg_groups = [];
+        console.time("Triggers db ✅ --> time ");
+        const {data} = await axios.get(`${BASEURL}evolution-trigger/`);
+        const triggers = [];
 
         if (!data || !data.results || data.results.length === 0) {
             throw new Error("La API no devolvió resultados válidos.");
@@ -21,24 +21,24 @@ module.exports = async () => {
 
         if(response && response.length > 0){
             
-            for (const egg of response) {
+            for (const trigger of response) {
 
-                const exist = Egg_Groups.findOne({where : {
-                    id : egg.data.id,
+                const exist = Triggers.findOne({where : {
+                    id : trigger.data.id,
                 }});
 
                 if(!exist) {
-                    egg_groups.push({
-                        id : egg.data.id,
-                        name : egg.data.name
+                    triggers.push({
+                        id : trigger.data.id,
+                        name : trigger.data.name
                     })
                 }
             }
         };  
-        await Egg_Groups.bulkCreate(egg_groups)
-        console.timeEnd("Egg_Groups db ✅ --> time ")
+        await Triggers.bulkCreate(triggers)
+        console.timeEnd("Triggers db ✅ --> time ")
 
     } catch (error) {
-        console.error("Egg_Groups db error :" ,error);
+        console.error("Triggers db error :" ,error);
     }
 };

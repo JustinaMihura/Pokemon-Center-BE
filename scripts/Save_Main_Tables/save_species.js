@@ -20,7 +20,6 @@ module.exports = async () => {
         if (!data || !data.results || data.results.length === 0) {
             throw new Error("La API no devolvió resultados válidos.");
         };
-        await Species.destroy({where : {}});
         const slice_urls = batching(data.results.map(u => u.url), 50);
 
         for (let i = 0; i < slice_urls.length; i++) {
