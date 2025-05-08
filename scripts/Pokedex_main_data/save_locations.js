@@ -55,14 +55,16 @@ module.exports = async () => {
                         }
                     })
                 };
-
-                const region = await Regions.findOne({where : {
-                    name : v.data.region.name
-                }});
-
-                const hasRegion = await location.getRegion();
-                if(!hasRegion) await location.setRegion(region)
-             }
+                if(v.data.region?.name) {
+                    const region = await Regions.findOne({where : {
+                        name : v.data.region.name
+                        
+                    }});
+    
+                    const hasRegion = await location.getRegion();
+                    if(!hasRegion) await location.setRegion(region)
+                 }
+                }
         }
         
        }

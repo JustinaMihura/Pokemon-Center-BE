@@ -1470,12 +1470,12 @@ Lengueage.belongsToMany(Stats, {
   });
 
   Regions.belongsTo(Generations, {
-    foreignKey : "generation_id",
-    as : "main_generation"
+    foreignKey : "main_generation",
+   
   });
 
   Generations.hasOne(Regions , {
-    foreignKey : "generation_id"
+    foreignKey : "main_generation"
   });
 
   Regions.hasMany(Version_Groups , {

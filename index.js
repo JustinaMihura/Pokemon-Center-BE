@@ -32,7 +32,7 @@ const initializeApp = async () => {
   try {
 
     await sequelize.authenticate();
-    await sequelize.sync({ force: true });
+    await sequelize.sync( { force : false } );
     await checkSaveMonthly() 
 
     server.listen(process.env.PORT, process.env.NODE_ENV , () => {

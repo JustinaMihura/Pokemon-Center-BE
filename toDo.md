@@ -1,3 +1,4 @@
-. crear save_regions.js
-. buscar los errores de pokemon_relations
-. arreglar relations.js de db buscando errores de tipado luego de hacer ERDiagram.sql desde PostgreSQL hacia Lucid App. 
+. seguir con species_relations
+. luego seguir con items , moves, berries principalmente
+
+TENEMOS QUE TERMINAR YAAA ESTO ASI HACEMOS LO CONTROLLERSSSSS!!! 🤩🤩🤩

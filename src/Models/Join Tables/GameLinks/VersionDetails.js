@@ -27,7 +27,7 @@ module.exports = (sequelize) => {
        
        held_item_id : {
         type : DataTypes.INTEGER,
-        allowNull : false,
+        allowNull : true,
         references : {
             model : "Held_Items",
             key : "id"
@@ -41,6 +41,14 @@ module.exports = (sequelize) => {
             key : "id"
         }
        },
+       pokemon_encounter_id :{
+        type : DataTypes.INTEGER,
+        allowNull : true,
+        references : {
+            model : "Pokemon_Encounters",
+            key : "id"
+        }
+       }
     }, {
         timestamps : false,
         indexes: [

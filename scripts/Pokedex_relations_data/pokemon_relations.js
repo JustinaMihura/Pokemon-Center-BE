@@ -27,10 +27,10 @@ module.exports = async (pokemon_relations) => {
         
         //*___Metodos posibles para el modelo Pokemon____________
         
-         const instance_method = await Pokemon.findByPk(1);
+         /* const instance_method = await Pokemon.findByPk(1);
          console.dir(Object.getOwnPropertyNames(Object.getPrototypeOf(instance_method)), {
              maxArrayLength: null
-         });
+         }); */
 
         //*______________________________________________________
 
@@ -281,7 +281,7 @@ module.exports = async (pokemon_relations) => {
                     const [alreadyExist] = await Pokemon_Encounters.findOrCreate({
                         where: {
                             pokemon_id: poke_by_id.id,
-                            locations_areas_id: locations.id,
+                            location_area_id: locations.id
                         },
                     });
 
@@ -312,6 +312,7 @@ module.exports = async (pokemon_relations) => {
                                 name : encounter.method.name
                                 }})
 
+                                if(!method) continue; 
                                 const [encounter_detail] = await Encounter_Details.findOrCreate({where : {
 
                                     version_detail_id : version_details.id,
@@ -334,9 +335,10 @@ module.exports = async (pokemon_relations) => {
 
                                         if(!condition_value) continue;
 
-                                        await Encounter_Conditions_Values.create({
+                                        await Encounter_Conditions_Values.findOrCreate({where : {
                                             encounter_detail_id : encounter_detail.id,
                                             condition_value_id : condition_value.id
+                                        }
                                         });
 
                                     }
@@ -401,13 +403,16 @@ module.exports = async (pokemon_relations) => {
                         name : pa.generation.name
                     }})
 
-                    for(const a of pa.abilities) {
+                   
+                         for(const a of pa.abilities) {
 
                         const abilityName = !a.ability?.name ? "unknown" : a.ability.name;
                         
-                        const [ability] = await Abilities.findOrCreate({where : {
+                        const ability = await Abilities.findOne({where : {
                             name : abilityName
                         }});
+
+                        if(!ability) continue;
 
                         const [poke_ability] = await Pokemon_Abilities.findOrCreate({where : {
                             abilities_id : ability.id,
@@ -424,6 +429,8 @@ module.exports = async (pokemon_relations) => {
                             generation_id : gen.id
                         }});
                     }
+                    
+                   
                 }
             }   
         })); 
