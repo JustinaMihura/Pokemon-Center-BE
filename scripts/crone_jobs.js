@@ -24,13 +24,13 @@ module.exports = async () => {
 
         } else {
 
-             const date_register = new Date(register.latest_run);
+           /*   const date_register = new Date(register.latest_run);
              const diff_month = (time_now.getFullYear() * 12 + time_now.getMonth()) -
                      (date_register.getFullYear() * 12 + date_register.getMonth());
             
              if(diff_month >= 1 ) {
                 
-                console.log("Paso mas de un mes! Actualizando base de datos");
+                console.log("Paso mas de un mes! Actualizando base de datos"); */
                 
                 await saves_manager();
                 await Executable_Logs.create({
@@ -40,7 +40,7 @@ module.exports = async () => {
             });
             // }
                 return
-        }
+        /* } */
     }
     } catch (error) {
         console.log({"error" : error});

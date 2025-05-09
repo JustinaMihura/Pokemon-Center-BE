@@ -41,7 +41,7 @@ module.exports = (sequelize) => {
         Genders,
         Triggers,
         LevelExperiences,
-        GrowthRates,
+        Growth_Rates,
         Habitad,
         Pal_Park_Area,
         Pal_Park_Encounters,
@@ -387,7 +387,7 @@ Pokemon.belongsToMany(Types, {
 
   Lengueage.belongsToMany(Contest_Effects , {
     through : Effects_Entries,
-    foreignKey : "lenguaege_id",
+    foreignKey : "langueage_id",
     otherKey : "contest_effect_id"
   });
   
@@ -395,12 +395,12 @@ Pokemon.belongsToMany(Types, {
   Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries,
     foreignKey  : "contest_effect_id",
-    otherKey : "language_id"
+    otherKey : "langueage_id"
   });
 
   Lengueage.belongsToMany(Contest_Effects , {
     through : Flavor_text_entries,
-    foreignKey : "language_id",
+    foreignKey : "langueage_id",
     otherKey : "contest_effect_id"
   });
   
@@ -511,13 +511,13 @@ Pokemon.belongsToMany(Types, {
   Super_Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries, 
     foreignKey : "super_contest_effects_id",
-    otherKey : "language_id",
+    otherKey : "langueage_id",
     as : "Flavor_texts"
   });
 
   Lengueage.belongsToMany(Super_Contest_Effects , {
     through : Flavor_text_entries, 
-    foreignKey : "language_id",
+    foreignKey : "langueage_id",
     otherKey :"super_contest_effects_id",
     as : "Super_contest_effects"
   });
@@ -1126,22 +1126,22 @@ Pokemon.belongsToMany(Types, {
      as : "Generation"
     })
   
-  GrowthRates.hasMany(LevelExperiences, {
+  Growth_Rates.hasMany(LevelExperiences, {
     foreignKey : "levels_experiences_id" ,
      as : "levels"
     })
 
-  LevelExperiences.belongsTo(GrowthRates, {
+  LevelExperiences.belongsTo(Growth_Rates, {
     foreignKey : "levels_experiences_id" ,
      as : "levels"
     })
   
-  Species.belongsTo(GrowthRates , {
+  Species.belongsTo(Growth_Rates , {
     foreignKey : "growth_rate_id" ,
      as : "growth_rate"
     })
 
-  GrowthRates.hasMany(Species, {
+  Growth_Rates.hasMany(Species, {
     foreignKey : "growth_rate_id" ,
      as : "growth_rate"
     })
@@ -1178,7 +1178,6 @@ Pokemon.belongsToMany(Types, {
   
   Species.hasMany(Varieties , {
     foreignKey : "species_id",
-     as : "varieties"
     })
 
   Varieties.belongsTo(Species , {
@@ -1205,8 +1204,30 @@ Pokemon.belongsToMany(Types, {
     as : "flavor_entries"
   });
 
-  Flavor_text_entries.belongsTo(Lengueage ,{foreignKey : "langueage_id"});
 
+  Species.belongsToMany(Lengueage, {
+    through : Flavor_text_entries,
+    foreignKey : "species_id",
+    otherKey : "langueage_id",
+  });
+
+  Lengueage.belongsToMany(Species, {
+    through : Flavor_text_entries,
+    foreignKey : "langueage_id",
+    otherKey : "species_id",
+  });
+
+  Species.belongsToMany(Lengueage, {
+    through : Names,
+    foreignKey : "species_id",
+    otherKey : "langueage_id",
+  });
+
+  Lengueage.belongsToMany(Species, {
+    through : Names,
+    foreignKey : "langueage_id",
+    otherKey : "species_id",
+  });
 //?_________________________________________________________________________________________________________
 //?----------------------------------------------------------------------------------------------------------
 

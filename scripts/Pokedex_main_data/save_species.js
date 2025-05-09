@@ -10,27 +10,36 @@ const {Species} = sequelize.models;
 module.exports = async () => {
 
     try {
+
         console.time("Species db ✅ --> time ");
+
         const limit = pLimit(10);
         const species = [];
         const species_data = [];
+
         const {data} = await axios.get(`${BASEURL}pokemon-species/?offset=0&limit=1025`);
 
 
         if (!data || !data.results || data.results.length === 0) {
             throw new Error("La API no devolvió resultados válidos.");
         };
+
         const slice_urls = batching(data.results.map(u => u.url), 50);
 
         for (let i = 0; i < slice_urls.length; i++) {
 
             const element = slice_urls[i];
-            const data = await Promise.all(element.map(url => limit(() => axios.get(url))));
+            const results = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
-            if(data) {
+            if(results) {
                 
-                data.map((e, i) => {
-                    species.push({
+                for (const e of results) {
+
+                    const specie = await Species.findOne({where : {
+                        name : e.data.name
+                    }});
+                    
+                    let compare_data = {
                         base_happiness : e.data.base_happiness,
                         capture_rate : e.data.capture_rate,
                         forms_switchable :e.data.forms_switchable,
@@ -42,8 +51,31 @@ module.exports = async () => {
                         is_mythical : e.data.is_mythical,
                         id : e.data.id,
                         name : e.data.name
-                    });
+                    };
+                    
+                    if(specie) {
+    
+                        let compare = ['base_happines','capture_rate','forms_switchable','gender_rate','has_gender_differences',' hatch_counter','is_baby','is_legendary',' is_mythical'];
+                        let update = {};
+                                
+                        for (const attr of compare) {
+                            if(
+                                compare_data[attr] !== null &&
+                                compare_data[attr] !== undefined &&
+                                compare_data[attr] !== specie[attr]
+                            ){
+                                update[attr] = compare_data[attr]
+                            }
+                        }
+    
+                        if(Object.keys(update).length > 0) {
+                            await specie.update(update)
+                        };
 
+                    } else {
+                        species.push(compare_data);
+                    }
+                    
                     species_data.push({
                         id : e.data.id,
                         color : e.data.color,
@@ -60,8 +92,7 @@ module.exports = async () => {
                         shape : e.data.shape,
                         varieties : e.data.varieties
                     })
-                    return
-                });
+                };                
             }
             await new Promise(res => setTimeout(res, 500));
         };

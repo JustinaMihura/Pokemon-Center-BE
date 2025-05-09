@@ -22,6 +22,8 @@ const save_triggers = require("./Pokedex_main_data/save_triggers.js");
 const save_encounter_method = require("./Pokedex_main_data/save_encounter_method.js");
 const save_regions = require("./Pokedex_main_data/save_regions.js");
 const save_version_group = require("./Pokedex_main_data/save_version_groups.js")
+const save_growth_rate = require("./Pokedex_main_data/save_growth_rate.js")
+const save_pal_park_area = require("./Pokedex_main_data/save_pal_palk_area.js");
 
 module.exports = async () => {
 
@@ -29,7 +31,8 @@ module.exports = async () => {
                                                         // ( ❌❌❌ optimizacion con bulkCreate y verificacion de data -->//! dificil lectura y actualizacion de datos )
                                                         // ( ✅✅✅ Guardar con un bucle uno por uno con findOCreate al buscar otros registros para relacionarlos, luego en su respectivo archivo guardara sus atributos )
         const species_data = await save_species();    //
-        const pokemons_data = await save_pokemon();     //
+        const pokemons_data = await save_pokemon();
+        await save_growth_rate()     //
         await save_lenguage();                          //
         await save_versions();                          //
         await save_version_group();
@@ -38,11 +41,12 @@ module.exports = async () => {
         await save_triggers();                          //
         await save_encounter_method();                  //
         await save_evolutions_chain();                  //
-        await save_forms();                             //
+        //await save_forms();                             //
         await save_conditions();                        //
         await save_conditions_values();                 //
         await save_locations_areas();                   //
-        await save_abilitites();                        //
+        await save_abilitites();            
+        await save_pal_park_area();            //
         await save_types();                             //
         await save_moves();                             //
         await save_items();                             //
@@ -50,8 +54,8 @@ module.exports = async () => {
         await save_egg_groups();                        //
         await save_pokedexes();                         //
         await save_locations();                         //
-        await pokemon_relations(pokemons_data)          //
-        //await save_species_relations(species_data)
+        //await pokemon_relations(pokemons_data)          //
+        await save_species_relations(species_data)
     } catch (error) {
         console.log(error);
         
