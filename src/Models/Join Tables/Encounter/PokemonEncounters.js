@@ -26,9 +26,9 @@ module.exports = (sequelize) => {
                 key : "id"
             }
         },
-        version_details_id : {
+        version_details_id : { 
             type : DataTypes.INTEGER,
-            allowNull : false, 
+            allowNull : true, 
             references : {
                 model : "Version_Details",
                 key : "id"
@@ -36,12 +36,12 @@ module.exports = (sequelize) => {
         }
     }, {
         timestamps : false,
-        indexes : [
+       /*  indexes : [
             {
                 unique: true,
                 fields : ['version_details_id','location_area_id', 'pokemon_id']
             }
-        ]
+        ] */
     },
    
 )

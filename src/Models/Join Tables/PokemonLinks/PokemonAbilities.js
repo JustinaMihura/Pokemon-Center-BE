@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
                 key : "id"
             }
         },
-        ability_id : {
+        abilities_id : {
             type : DataTypes.INTEGER,
             allowNull : false,
             references : {
@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
             indexes: [
                 {
                   unique: true, 
-                  fields: ['pokemon_id', 'ability_id'] 
+                  fields: ['pokemon_id', 'abilities_id'] 
                 }
               ]
         }

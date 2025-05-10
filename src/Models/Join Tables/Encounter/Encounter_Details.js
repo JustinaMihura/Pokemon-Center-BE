@@ -12,14 +12,15 @@ module.exports = (sequelize) => {
             type : DataTypes.INTEGER,
             allowNull : false
         },
-        max_chance : {
-            type : DataTypes.INTEGER,
-            allowNull : false
-        },
+        
         min_level : {
             type : DataTypes.INTEGER,
             allowNull : false
-        }
+        },
+        max_level : {
+            type : DataTypes.INTEGER,
+            allowNull : false
+        },
     }, {
         timestamps : false
     },

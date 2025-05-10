@@ -41,7 +41,7 @@ module.exports = (sequelize) => {
         Genders,
         Triggers,
         LevelExperiences,
-        GrowthRates,
+        Growth_Rates,
         Habitad,
         Pal_Park_Area,
         Pal_Park_Encounters,
@@ -347,10 +347,13 @@ Pokemon.belongsToMany(Types, {
   Generations.hasMany(Moves, {foreignKey : "generation_id"})
   
   Moves.belongsTo(Types , {
-    foreignKey : "types_id",
+    foreignKey : "type_move_id",
     as : "type"
   });
 
+  Types.hasMany(Moves, {
+    foreignKey : "type_move_id"
+  })
   
   Moves.belongsTo(Target , {foreignKey : "target_id"})
   Target.hasMany(Moves, {foreignKey : "target_id"})
@@ -384,7 +387,7 @@ Pokemon.belongsToMany(Types, {
 
   Lengueage.belongsToMany(Contest_Effects , {
     through : Effects_Entries,
-    foreignKey : "lenguaege_id",
+    foreignKey : "langueage_id",
     otherKey : "contest_effect_id"
   });
   
@@ -392,12 +395,12 @@ Pokemon.belongsToMany(Types, {
   Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries,
     foreignKey  : "contest_effect_id",
-    otherKey : "language_id"
+    otherKey : "langueage_id"
   });
 
   Lengueage.belongsToMany(Contest_Effects , {
     through : Flavor_text_entries,
-    foreignKey : "language_id",
+    foreignKey : "langueage_id",
     otherKey : "contest_effect_id"
   });
   
@@ -508,13 +511,13 @@ Pokemon.belongsToMany(Types, {
   Super_Contest_Effects.belongsToMany(Lengueage , {
     through : Flavor_text_entries, 
     foreignKey : "super_contest_effects_id",
-    otherKey : "language_id",
+    otherKey : "langueage_id",
     as : "Flavor_texts"
   });
 
   Lengueage.belongsToMany(Super_Contest_Effects , {
     through : Flavor_text_entries, 
-    foreignKey : "language_id",
+    foreignKey : "langueage_id",
     otherKey :"super_contest_effects_id",
     as : "Super_contest_effects"
   });
@@ -523,8 +526,8 @@ Pokemon.belongsToMany(Types, {
   //?______________________________________- Locations / Locations_Areas -_______________________________________________________________
 
   Locations.hasMany(Locations_Areas, {
-    foreignKey : "locations_areas_id",
-    as : "areas"
+    foreignKey : "location_areas_id",
+    as : "Areas"
   });
 
   Locations_Areas.belongsTo(Locations, {
@@ -534,15 +537,15 @@ Pokemon.belongsToMany(Types, {
 
   Locations.belongsToMany(Generations, {
     through : Game_Indices,
-    foreignKey : "locations_id",
-    otherKey : "generations_id",
+    foreignKey : "location_id",
+    otherKey : "generation_id",
     
   });
 
   Generations.belongsToMany(Locations, {
     through : Game_Indices,
-    foreignKey : "generations_id",
-    otherKey : "locations_id",
+    foreignKey : "generation_id",
+    otherKey : "location_id",
     as : "locations"
   });
 
@@ -562,7 +565,7 @@ Pokemon.belongsToMany(Types, {
 
   Locations.belongsTo(Regions , {
     foreignKey : "region_id",
-    as : "region"
+    as : "Region"
   });
 
   Regions.hasMany(Locations, {
@@ -586,7 +589,7 @@ Pokemon.belongsToMany(Types, {
 
   Locations_Areas.belongsToMany(Encounter_Methods, {
     through : Encounter_Method_Rate,
-    foreignKey : "locations_areas_id",
+    foreignKey : "location_area_id",
     otherKey : "encounter_method_id",
     as : "encounter_method_rate"
   });
@@ -594,8 +597,16 @@ Pokemon.belongsToMany(Types, {
   Encounter_Methods.belongsToMany(Locations_Areas, {
     through : Encounter_Method_Rate,
     foreignKey : "encounter_method_id",
-    otherKey : "locations_areas_id",
+    otherKey : "location_area_id",
     as : "locations_areas_rate"
+  });
+
+  Encounter_Method_Rate.hasMany(Version_Details, {
+    foreignKey : "encounter_method_rate_id"
+  });
+
+  Version_Details.belongsTo(Encounter_Method_Rate, {
+    foreignKey : "encounter_method_rate_id"
   });
 
   Locations_Areas.belongsToMany(Lengueage, {
@@ -654,16 +665,15 @@ Pokemon.belongsToMany(Types, {
   
   Encounter_Details.belongsToMany(Conditions_Values, {
     through : Encounter_Conditions_Values ,
-     foreignKey : "encounter_details_id",
-     otherKey : "conditions_values_id",
-     as : "conditions_values"
+     foreignKey : "encounter_detail_id",
+     otherKey : "condition_value_id",
+     as : "Condition"
     });
 
   Conditions_Values.belongsToMany(Encounter_Details, {
     through : Encounter_Conditions_Values ,
-     foreignKey : "conditions_values_id",
-     otherKey : "encounter_details_id",
-     as : "encounters_details"
+     foreignKey : "condition_value_id",
+     otherKey : "encounter_detail_id",
     });
 
 
@@ -785,7 +795,7 @@ Pokemon.belongsToMany(Types, {
   });
 
   Item_Fling_Effect.hasMany(Items, {
-    foreignKey : "items_id",
+    foreignKey : "fling_effect_id",
     as : "Items"
   });
 
@@ -920,13 +930,13 @@ Pokemon.belongsToMany(Types, {
   Species.belongsToMany(Pokedexes, {
     through : Pokemon_Pokedexes,
     foreignKey : "species_id", 
-    otherKey : "pokemon_pokedexes_id",
+    otherKey : "pokedexes_id",
      as: 'pokedex_numbers'
     });
 
   Pokedexes.belongsToMany(Species, {
     through : Pokemon_Pokedexes,
-    foreignKey : "pokedex:id",
+    foreignKey : "pokedexes_id",
     otherKey : "species_id",
      as: 'pokemon_entries'
     });
@@ -1004,7 +1014,13 @@ Pokemon.belongsToMany(Types, {
       });
       
  //?______________________________-Evolutions_Details-___________________________________________-
-  
+   Evolutions.hasMany(Evolution_Details, {
+     foreignKey: 'evolution_id' 
+    });
+
+  Evolution_Details.belongsTo(Evolutions, {
+     foreignKey: 'evolution_id' 
+    });
   Evolution_Details.belongsTo(Items, {
     foreignKey : "item_id", 
     as : "item"
@@ -1015,12 +1031,12 @@ Pokemon.belongsToMany(Types, {
   });
   
   Evolution_Details.belongsTo(Items , {
-    foreignKey : "heldItems_id" ,
+    foreignKey : "held_item_id" ,
      as : "heldItem"
   });
 
   Items.hasMany(Evolution_Details , {
-    foreignKey : "heldItems_id"
+    foreignKey : "held_item_id"
   })
   
   Evolution_Details.belongsTo(Genders, {
@@ -1032,12 +1048,12 @@ Pokemon.belongsToMany(Types, {
   })
   
   Evolution_Details.belongsTo(Moves, {
-    foreignKey : "know_moves_id" , 
+    foreignKey : "know_move_id" , 
     as : "Know_Move"
   })
 
   Moves.hasMany(Evolution_Details, {
-    foreignKey : "know_moves_id"
+    foreignKey : "know_move_id"
   })
   
   Evolution_Details.belongsTo(Types , {
@@ -1070,11 +1086,11 @@ Pokemon.belongsToMany(Types, {
   })
   
   Evolution_Details.belongsTo(Triggers, {
-    foreignKey : "triggers_id" ,
+    foreignKey : "trigger_id" ,
      as : "trigger"
     })
   Triggers.hasMany(Evolution_Details , {
-    foreignKey : "triggers_id"
+    foreignKey : "trigger_id"
   })
   
   Evolution_Details.belongsTo(Species , {
@@ -1096,13 +1112,7 @@ Pokemon.belongsToMany(Types, {
     as : "Trade_Species"
   })
   
-  Evolutions.hasMany(Evolution_Details, {
-     foreignKey: 'evolution_id' 
-    });
-
-  Evolution_Details.belongsTo(Evolutions, {
-     foreignKey: 'evolution_id' 
-    });
+ 
       
   //?___________________________________________________________________________________________________
   
@@ -1116,22 +1126,22 @@ Pokemon.belongsToMany(Types, {
      as : "Generation"
     })
   
-  GrowthRates.hasMany(LevelExperiences, {
+  Growth_Rates.hasMany(LevelExperiences, {
     foreignKey : "levels_experiences_id" ,
      as : "levels"
     })
 
-  LevelExperiences.belongsTo(GrowthRates, {
+  LevelExperiences.belongsTo(Growth_Rates, {
     foreignKey : "levels_experiences_id" ,
      as : "levels"
     })
   
-  Species.belongsTo(GrowthRates , {
+  Species.belongsTo(Growth_Rates , {
     foreignKey : "growth_rate_id" ,
      as : "growth_rate"
     })
 
-  GrowthRates.hasMany(Species, {
+  Growth_Rates.hasMany(Species, {
     foreignKey : "growth_rate_id" ,
      as : "growth_rate"
     })
@@ -1168,7 +1178,6 @@ Pokemon.belongsToMany(Types, {
   
   Species.hasMany(Varieties , {
     foreignKey : "species_id",
-     as : "varieties"
     })
 
   Varieties.belongsTo(Species , {
@@ -1195,8 +1204,30 @@ Pokemon.belongsToMany(Types, {
     as : "flavor_entries"
   });
 
-  Flavor_text_entries.belongsTo(Lengueage ,{foreignKey : "langueage_id"});
 
+  Species.belongsToMany(Lengueage, {
+    through : Flavor_text_entries,
+    foreignKey : "species_id",
+    otherKey : "langueage_id",
+  });
+
+  Lengueage.belongsToMany(Species, {
+    through : Flavor_text_entries,
+    foreignKey : "langueage_id",
+    otherKey : "species_id",
+  });
+
+  Species.belongsToMany(Lengueage, {
+    through : Names,
+    foreignKey : "species_id",
+    otherKey : "langueage_id",
+  });
+
+  Lengueage.belongsToMany(Species, {
+    through : Names,
+    foreignKey : "langueage_id",
+    otherKey : "species_id",
+  });
 //?_________________________________________________________________________________________________________
 //?----------------------------------------------------------------------------------------------------------
 
@@ -1460,12 +1491,12 @@ Lengueage.belongsToMany(Stats, {
   });
 
   Regions.belongsTo(Generations, {
-    foreignKey : "generation_id",
-    as : "main_generation"
+    foreignKey : "main_generation",
+   
   });
 
   Generations.hasOne(Regions , {
-    foreignKey : "generation_id"
+    foreignKey : "main_generation"
   });
 
   Regions.hasMany(Version_Groups , {
@@ -1522,13 +1553,7 @@ Lengueage.belongsToMany(Stats, {
     as : "pokedexes_trad"
   });
 
-  Encounter_Method_Rate.belongsTo(Version_Details, {
-    foreignKey : "version_details_id"
-  });
 
-  Version_Details.hasMany(Encounter_Method_Rate, {
-    foreignKey : "version_details_id"
-  });
 
 
 

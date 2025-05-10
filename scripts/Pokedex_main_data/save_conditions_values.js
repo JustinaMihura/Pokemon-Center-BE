@@ -13,12 +13,12 @@ module.exports = async () => {
         
         
         if(data) {
-            const data = await Promise.all(data.results.map(e => {
+            const results = await Promise.all(data.results.map(e => {
                return axios.get(e.url)
             }));
 
-            if(data) {
-                for (const c of data) {
+            if(results) {
+                for (const c of results) {
 
                     const condition = await Conditions.findOne({where : {
                         name : c.data.condition.name

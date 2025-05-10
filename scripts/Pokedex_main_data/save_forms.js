@@ -22,6 +22,7 @@ module.exports = async () => {
         const slice_urls = batching(data.results.map(e => e.url), 50);
         for (let i = 0; i < slice_urls.length; i++) {
             const element = slice_urls[i];
+            
             const data = await Promise.all(element.map(url => limit(() => axios.get(url))));
 
             if(data && data.length == 50){

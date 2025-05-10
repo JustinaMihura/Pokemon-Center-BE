@@ -7,6 +7,30 @@ module.exports = (sequelize) => {
             primaryKey : true,
             autoIncrement : true
         },
+        from_species_id : {
+            type : DataTypes.INTEGER,
+            allowNull : false,
+            references : {
+                model : "Species",
+                key : "id"
+            }
+        },
+        to_species_id : {
+            type : DataTypes.INTEGER,
+            allowNull : false,
+            references : {
+                model : "Species",
+                key : "id"
+            }
+        }
         
-    }, {timestamps : false})
+    }, {
+        timestamps : false,
+        indexes : [
+            {
+                unique : true, 
+                fields : ['to_species_id', 'from_species_id']
+            }
+        ]
+    })
 };

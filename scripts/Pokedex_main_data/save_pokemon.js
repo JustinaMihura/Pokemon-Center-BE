@@ -33,11 +33,12 @@ module.exports = async () => {
 
                 for (const e of data){
                     
-                    let pokemon_id; 
                     const compare = ["base_experience", "height", "weight", "is_default", "legacy_cry", "latest_cry"];
-
+                    
                     //-- la PokeApi tiene errores de guardado en los id de lo ultimos registros
                     //-- por ende los arreglamos aqui para que sea mas seguro y eficiente el guardado.
+                    
+                    let pokemon_id; 
                     
                     if (e.data.id < 10000) {
                         pokemon_id = e.data.id;
@@ -50,51 +51,58 @@ module.exports = async () => {
                     };
                     
                     const poke = await Pokemon.findOne({where : {
-                         id : pokemon_id,
-                         name: e.data.name, 
-                     }});
-
+                        id : pokemon_id,
+                        name: e.data.name, 
+                    }});
+                    
                     //-- Comparación de data de ambos lados (si existe en db)
                     //Verficando previamente si los valores no son null, undefined o diferente a data de la BD.
 
                     const compare_data = {
                         
-                            name: e.data.name,
-                            id: pokemon_id,
-                            base_experience: e.data.base_experience,
-                            height: e.data.height,
-                            weight: e.data.weight,
-                            is_default : e.data.is_default,
-                            imgFront : e.data.sprites?.other?.["official-artwork"]?.front_default ||
-                                e.data.sprites?.other?.["dream_world"]?.front_default ||
-                                e.data.sprites.other?.["home"]?.front_default ||
-                                e.data.sprites?.front_default || 
-                                e.data.sprites?.other?.["showdown"]?.front_default ||
-                                "pokemon",
-                            imgShiny :e.data.sprites?.other["official-artwork"]?.front_shiny ||
-                                e.data.sprites?.other?.["dream_world"]?.front_shiny ||
-                                e.data.sprites?.other?.["home"]?.front_shiny ||
-                                e.data.sprites?.front_shiny || 
-                                e.data.sprites?.other?.["showdown"]?.front_shiny ||
-                                "pokemon",
-                            legacy_cry : e.data.cries?.["legacy"],
-                            latest_cry : e.data.cries?.["latest"]
-
-                            };
-
-                            if(poke) {
-
-                                const hasChange = compare.some(attr => (
-                                    
-                                    compare_data[attr] !== null &&
-                                    compare_data[attr] !== undefined &&
-                                    compare_data[attr] !== poke[attr]
-                                ));
+                        name: e.data.name,
+                        id: pokemon_id,
+                        base_experience: e.data.base_experience,
+                        height: e.data.height,
+                        weight: e.data.weight,
+                        is_default : e.data.is_default,
+                        imgFront : e.data.sprites?.other?.["official-artwork"]?.front_default ||
+                        e.data.sprites?.other?.["dream_world"]?.front_default ||
+                        e.data.sprites.other?.["home"]?.front_default ||
+                        e.data.sprites?.front_default || 
+                        e.data.sprites?.other?.["showdown"]?.front_default ||
+                        "pokemon",
+                        imgShiny :e.data.sprites?.other["official-artwork"]?.front_shiny ||
+                        e.data.sprites?.other?.["dream_world"]?.front_shiny ||
+                        e.data.sprites?.other?.["home"]?.front_shiny ||
+                        e.data.sprites?.front_shiny || 
+                        e.data.sprites?.other?.["showdown"]?.front_shiny ||
+                        "pokemon",
+                        legacy_cry : e.data.cries?.["legacy"],
+                        latest_cry : e.data.cries?.["latest"]
                         
-                                if (hasChange) await poke.update(compare_data);
+                    };
+                    
+                            if(poke) {
+                                
+                                let update = {};
+                                
+                                for (const attr of compare) {
+                                    if(
+                                        compare_data[attr] !== null &&
+                                        compare_data[attr] !== undefined &&
+                                        compare_data[attr] !== poke[attr]
+                                    ){
+                                        update[attr] = compare_data[attr]
+                                    }
+                                }
+
+                                if(Object.keys(update).length > 0) {
+                                    await poke.update(update)
+                                };
                                 
                             } else {
-
+                                
                                 pokemons.push(compare_data);
                             };
                     

@@ -21,11 +21,13 @@ module.exports = async () => {
         const response = await Promise.all(data.results.map(e => limit(() => axios.get(e.url))));
         
         if(response) {
+
             for(const v of response){
-                Versions.create({
+
+                await Versions.findOrCreate({where : {
                     name : v.data.name,
                     id : v.data.id
-                });
+                }});
             };
         }
         console.timeEnd("Version db ✅ --> time :")

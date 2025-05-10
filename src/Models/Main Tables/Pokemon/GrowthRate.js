@@ -1,7 +1,7 @@
 const { DataTypes} = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("GrowthRates" , { 
+    sequelize.define("Growth_Rates" , { 
         id : {
             type : DataTypes.INTEGER,
             primaryKey : true
@@ -10,12 +10,9 @@ module.exports = (sequelize) => {
             type : DataTypes.STRING(20),
             allowNull : false
         },
-        description : {
-            type : DataTypes.STRING(50),
-            allowNull : false
-        },
+        
         formula : {
-            type : DataTypes.STRING(200)
+            type : DataTypes.STRING(500)
         }
         //"✅"levelsexperiences.id 1 a muchos 
     }, 
