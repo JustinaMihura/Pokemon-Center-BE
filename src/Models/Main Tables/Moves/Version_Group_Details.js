@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
     sequelize.define("Version_Group_Details" , {
        level_learned_at : { //! For Moves
         type : DataTypes.INTEGER,
-        allowNull : false
+        allowNull : true
        },
        
        pokemon_move_id : {

@@ -1,6 +1,6 @@
 const axios = require("axios");
 const {sequelize} = require("../../db/db.js");
-const batching = require("../batching_fn.js");
+const batching = require("../../utils/batching_fn.js");
 const pLimit = require("p-limit").default;
 require("dotenv").config();
 
@@ -19,6 +19,7 @@ module.exports =  async () => {
         const slice_urls = batching(data.results.map(e => e.url), 50);
         let last_valid_id = 0;
         const fields = ['pp', 'effect_chance','power','accuracy', 'priority'];
+        const move_relations = [];
         const update = {};
         const limit = pLimit(10);
         
@@ -38,6 +39,28 @@ module.exports =  async () => {
                 let exist = await Moves.findOne({where : {
                     id : last_valid_id,
                 }});
+
+
+                move_relations.push({
+                    id : last_valid_id,
+                    contest_combos : m.data.contest_combos,
+                    contest_effect : m.data.contest_effect,
+                    contest_type : m.data.contest_type,
+                    damage_class : m.data.damage_class,
+                    effect_changes  :m.data.effect_changes,
+                    flavor_text_entries  : m.data.flavor_text_entries,
+                    generation : m.data.generation,
+                    learned_by_pokemon : m.data.learned_by_pokemon,
+                    machines : m.data.machines,
+                    meta : m.data.meta,
+                    names : m.data.names,
+                    past_values : m.data.past_values,
+                    stat_changes : m.data.stat_changes,
+                    super_contest_effect : m.data.super_contest_effect,
+                    target : m.data.target,
+                    type : m.data.type,
+                    effect_entries  : m.data.effect_entries
+                })
 
                 if(!exist) {
 
@@ -69,8 +92,8 @@ module.exports =  async () => {
         };
 
     console.timeEnd("Moves db ✅ --> time :");
+    return move_relations;
 
-    return
     } catch (error) {
         console.error({"Moves_db error" : error});
         

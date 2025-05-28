@@ -15,6 +15,22 @@ module.exports = (sequelize) => {
          short_effect : {
             type : DataTypes.STRING(20),
             allowNull : true
+         },
+         langueage_id : {
+            type : DataTypes.INTEGER,
+            allowNull : true,
+            references : {
+                model : "Lengueage",
+                key : "id"
+            }
+         },
+         abilities_id : {
+            type : DataTypes.INTEGER,
+            allowNull : true,
+            references : {
+                model : "Abilities",
+                key : "id"
+            }
          }
     } , 
         {

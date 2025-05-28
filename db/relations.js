@@ -225,13 +225,13 @@ Pokemon.belongsToMany(Types, {
     Abilities.belongsToMany(Lengueage, {
       through : Effects_Entries,
       foreignKey : "abilities_id",
-      otherKey : "lengueage_id",
+      otherKey : "langueage_id",
       as : "Effects_entries "
     }); 
 
     Lengueage.belongsToMany(Abilities , {
       through : Effects_Entries,
-      foreignKey  : "lengueage_id",
+      foreignKey  : "langueage_id",
       otherKey : "abilities_id",
       as : "abilities"
     });
@@ -240,7 +240,7 @@ Pokemon.belongsToMany(Types, {
       foreignKey : "effect_changes_id"
     });
 
-    Effect_Changes.hasMany(Effect_Changes, {
+    Effect_Changes.hasMany(Effects_Entries, {
       foreignKey : "effect_changes_id",
       as : "effect_enries"
     });
@@ -276,13 +276,13 @@ Pokemon.belongsToMany(Types, {
     Abilities.belongsToMany(Lengueage , {
       through : Names,
       foreignKey : "abilities_id",
-      otherKey : "lengueage_id",
+      otherKey : "langueage_id",
       as : "names_traducc"
     });
 
     Lengueage.belongsToMany(Abilities, {
       through : Names, 
-      foreignKey : "lengueage_id",
+      foreignKey : "langueage_id",
       otherKey : "abilities_id",
       as : "abilitites_traducc"
     });
@@ -425,12 +425,12 @@ Pokemon.belongsToMany(Types, {
   Move_Damage_Class.belongsToMany(Lengueage, {
     through : Descriptions,
     foreignKey : "move_damage_class_id",
-    otherKey : "lengueage_id"
+    otherKey : "langueage_id"
   });
 
   Lengueage.belongsToMany(Move_Damage_Class, {
     through : Descriptions,
-    foreignKey : "lengueage_id",
+    foreignKey : "langueage_id",
     otherKey : "move_damage_class_id"
   });
 
@@ -467,13 +467,13 @@ Pokemon.belongsToMany(Types, {
   Moves.belongsToMany(Lengueage , {
     through : Names , 
     foreignKey : "move_id",
-    otherKey : "lengueage_id",
+    otherKey : "langueage_id",
     as : "Traducc"
   });
 
   Lengueage.belongsToMany(Moves , {
     through : Names , 
-    foreignKey : "lengueage_id",
+    foreignKey : "langueage_id",
     otherKey : "move_id",
     as : "Moves_names"
   });
@@ -552,13 +552,13 @@ Pokemon.belongsToMany(Types, {
   Locations.belongsToMany(Lengueage , {
     through : Names,
     foreignKey : "locations_id",
-    otherKey : "lengueage_id",
+    otherKey : "langueage_id",
     as : "names"
   })
 
   Lengueage.belongsToMany(Locations, {
     through : Names, 
-    foreignKey : "lengueage_id",
+    foreignKey : "langueage_id",
     otherKey : "locations_id",
     as : "locations_traducc"
   });
@@ -612,13 +612,13 @@ Pokemon.belongsToMany(Types, {
   Locations_Areas.belongsToMany(Lengueage, {
     through : Names, 
     foreignKey : "locations_areas_id",
-    otherKey : "lengueage_id",
+    otherKey : "langueage_id",
     as : "names"
   });
 
   Lengueage.belongsToMany(Locations_Areas, {
     through : Names, 
-    foreignKey : "lengueage_id",
+    foreignKey : "langueage_id",
     otherKey : "locations_areas_id",
     as : "locations_Areas_traduc"
   });
@@ -739,13 +739,13 @@ Pokemon.belongsToMany(Types, {
   Items.belongsToMany(Lengueage , {
     through  : Effects_Entries,
     foreignKey : "items_id",
-    otherKey : "lengueage_id",
+    otherKey : "langueage_id",
     as : "effect_entries"
   });
 
   Lengueage.belongsToMany(Items, {
     through : Effects_Entries,
-    foreignKey : "lengueage_id",
+    foreignKey : "langueage_id",
     otherKey : "items_id",
     as : "items_names"
   });
@@ -906,13 +906,13 @@ Pokemon.belongsToMany(Types, {
     Types.belongsToMany(Lengueage, {
       through : Names,
       foreignKey: "types_id",
-      otherKey : "lengueage_id",
+      otherKey : "langueage_id",
       as : "names_traducc"
     });
 
     Lengueage.belongsToMany(Types , {
       through : Names,
-      foreignKey : "lengueage_id",
+      foreignKey : "langueage_id",
       otherKey : "types_id",
       as : "types_names"
     });
@@ -1087,7 +1087,7 @@ Pokemon.belongsToMany(Types, {
   
   Evolution_Details.belongsTo(Triggers, {
     foreignKey : "trigger_id" ,
-     as : "trigger"
+    
     })
   Triggers.hasMany(Evolution_Details , {
     foreignKey : "trigger_id"
@@ -1294,13 +1294,13 @@ Natures.belongsTo(Stats , {
 Natures.belongsToMany(Lengueage , {
   through : Names,
   foreignKey : "natures_id",
-  otherKey : "lengueage_id",
+  otherKey : "langueage_id",
   as : "names"
 });
 
 Lengueage.belongsToMany(Natures, {
   through : Names,
-  foreignKey : "lengueage_id",
+  foreignKey : "langueage_id",
   otherKey : "natures_id",
   as : "traducc_natures"
 });
@@ -1372,13 +1372,13 @@ Characteristics_IVs.belongsTo(Stats , {
 Characteristics_IVs.belongsToMany(Lengueage , {
   through : Descriptions,
   foreignKey : "characteristics_id",
-  otherKey : "lengueage_id",
+  otherKey : "langueage_id",
   as : "descriptions"
 });
 
 Lengueage.belongsToMany(Characteristics_IVs , {
   through : Descriptions,
-  foreignKey : "lengueage_id",
+  foreignKey : "langueage_id",
   otherKey : "characteristics_id",
   as : "Characteristics_IVs"
 });
@@ -1413,12 +1413,12 @@ Lengueage.belongsToMany(Characteristics_IVs , {
 Stats.belongsToMany(Lengueage , {
   through : Names,
   foreignKey : "stats_id",
-  otherKey : "lengueage_id",
+  otherKey : "langueage_id",
 });
 
 Lengueage.belongsToMany(Stats, {
   through : Names,
-  foreignKey : "lengueage_id",
+  foreignKey : "langueage_id",
   otherKey : "stats_id"
 })
 //?_____________________________________-Game-___________________________________________________________
@@ -1528,13 +1528,13 @@ Lengueage.belongsToMany(Stats, {
   Pokedexes.belongsToMany(Lengueage, {
     through : Descriptions, 
     foreignKey : "pokedexes_id",
-    otherKey : "lengueage_id",
+    otherKey : "langueage_id",
     as : "descriptions_trad"
   });
 
   Lengueage.belongsToMany(Pokedexes, {
     through : Descriptions,
-    foreignKey : "lengueage_id",
+    foreignKey : "langueage_id",
     otherKey: "pokedexes_id",
     as : "pokedexes_desc"
   });
@@ -1542,13 +1542,13 @@ Lengueage.belongsToMany(Stats, {
   Pokedexes.belongsToMany(Lengueage, {
     through : Names,
     foreignKey : "pokedexes_id",
-    otherKey : "lengueage_id",
+    otherKey : "langueage_id",
     as : "names_traducc"
   });
 
   Lengueage.belongsToMany(Pokedexes, {
     through : Names,
-    foreignKey : "lengueage_id",
+    foreignKey : "langueage_id",
     otherKey : "pokedexes_id",
     as : "pokedexes_trad"
   });

@@ -1,7 +1,7 @@
 const axios = require("axios");
 require("dotenv").config();
 const {sequelize} = require("../../db/db");
-const batching = require("../batching_fn");
+const batching = require("../../utils/batching_fn");
 const pLimit = require("p-limit").default;
 
 const {BASEURL} = process.env;

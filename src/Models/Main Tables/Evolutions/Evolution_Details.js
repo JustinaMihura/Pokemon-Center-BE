@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         },
         trigger_id : {
             type :DataTypes.INTEGER,
-            allowNull : true,
+            allowNull : false,
             references : {
                 model : "Triggers",
                 key : "id"

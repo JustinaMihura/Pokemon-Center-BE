@@ -7,13 +7,10 @@ module.exports = (sequelize) => {
             primaryKey : true
         },
         name : {
-            type : DataTypes.STRING(20),
+            type : DataTypes.STRING(50),
             allowNull : false
         },
-        description : {
-            type : DataTypes.STRING(100),
-            allowNull : false
-        }
+       
         // version.group.id 1 a muchos
     }, 
         {

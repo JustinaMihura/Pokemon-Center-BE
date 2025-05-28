@@ -4,7 +4,7 @@ const routes = require("./src/Routes/index.js");
 require("dotenv").config();
 const {sequelize}= require("./db/db.js")
 const {FRONTEND_URL} = process.env
-const checkSaveMonthly = require("./scripts/crone_jobs.js")
+const checkSaveMonthly = require("./utils/crone_jobs.js")
 
 
 const cookieParser = require('cookie-parser');
@@ -32,8 +32,8 @@ const initializeApp = async () => {
   try {
 
     await sequelize.authenticate();
-    await sequelize.sync( { force : false } );
-    await checkSaveMonthly() 
+    await sequelize.sync( { force : true } );
+    await checkSaveMonthly("update") 
 
     server.listen(process.env.PORT, process.env.NODE_ENV , () => {
       console.log(server.name + " is listening on port " + (process.env.PORT));

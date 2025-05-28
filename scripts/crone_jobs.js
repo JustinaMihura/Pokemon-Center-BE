@@ -1,22 +1,21 @@
-const saves_manager = require("./saves_manager.js")
+const callAllApi = require("../utils/callAllApi.js")
 const { sequelize } = require("../db/db.js");
 const {Executable_Logs} = sequelize.models   
 
-module.exports = async () => {
+module.exports = async (taskName) => {
 
-    const task =  "save_monthly";
     const time_now = new Date();
 
     try {
 
        const register = await Executable_Logs.findOne({
-        where : { task : task },
+        where : { task : taskName },
         order: [['latest_run', 'DESC']]
         });
 
         if(!register) {
 
-            await saves_manager();
+            const callResults = await callAllApi();
             await Executable_Logs.create({
             task : task,
             latest_run : time_now

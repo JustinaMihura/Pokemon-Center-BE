@@ -21,21 +21,21 @@ module.exports = async () => {
 
         if(response && response.length > 0){
             
-            for (const area of response) {
+            for (const areas of response) {
 
                 const exist = await Pal_Park_Area.findOne({where : {
-                    id : area.data.id,
+                    id : areas.data.id,
                 }});
 
                 if(!exist) {
                    area.push({
-                       id : color.data.id,
-                       name : color.data.name
+                       id : areas.data.id,
+                       name : areas.data.name
                    });
                 }
             }
         };
-        await Pal_Park_Areas.bulkCreate(area)  
+        await Pal_Park_Area.bulkCreate(area)  
         console.timeEnd("Pal_Park_Area db ✅ --> time ")
 
     } catch (error) {

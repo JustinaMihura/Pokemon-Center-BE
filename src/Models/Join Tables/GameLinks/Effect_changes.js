@@ -12,6 +12,22 @@ module.exports = (sequelize) => {
         type : DataTypes.INTEGER,
         allowNull : true
        },
+       abilities_id : {
+        type : DataTypes.INTEGER,
+            allowNull : true,
+            references : {
+                model : "Abilities",
+                id : "id"
+            }
+       },
+       version_group_id : {
+        type : DataTypes.INTEGER,
+            allowNull : true,
+            references : {
+                model : "Version_Groups",
+                id : "id"
+            }
+       },
        
     }, {
         timestamps : false

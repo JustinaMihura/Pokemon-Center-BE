@@ -14,6 +14,10 @@ module.exports = (sequelize) => {
         latest_run : {
             type : DataTypes.DATE,
             allowNull : false
+        },
+        data : {
+            type : DataTypes.JSON,
+            allowNull : false
         }
     }, {
         timestamps : false

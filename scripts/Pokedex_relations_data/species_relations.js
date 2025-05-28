@@ -21,10 +21,10 @@ module.exports = async (species_data) => {
         console.time("Species_relations db ✅ --> time ");
 
         //*___Metodos posibles para el modelo Pokemon_______________________________________
-        const instance_method = await Species.findByPk(1);
+        /* const instance_method = await Species.findByPk(1);
         console.dir(Object.getOwnPropertyNames(Object.getPrototypeOf(instance_method)), {
             maxArrayLength: null
-        });
+        }); */
         //*_________________________________________________________________________________
      
 

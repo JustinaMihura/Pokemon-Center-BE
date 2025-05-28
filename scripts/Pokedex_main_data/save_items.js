@@ -1,7 +1,7 @@
 const axios = require("axios");
 require("dotenv").config();
 const {sequelize} = require("../../db/db.js");
-const batching = require("../batching_fn.js");
+const batching = require("../../utils/batching_fn.js");
 const plimit = require("p-limit").default;
 
 
@@ -17,8 +17,10 @@ module.exports = async () => {
         const slice_urls = batching(data.results.map(e => e.url));
         let last_valid_id;
         const fields = ['baby_trigger_for','cost','fling_power'];
+        const items_relations = [];
         const update = {};
         const limit = plimit(10);
+
 
         for (let i = 0; i < slice_urls.length; i++) {
             const element = slice_urls[i];
@@ -35,6 +37,18 @@ module.exports = async () => {
                 let exist = await Items.findOne({where : {
                     id : last_valid_id
                 }});
+
+                items_relations.push({
+                    id : last_valid_id,
+                    attributes : i.data.attributes,
+                    category : i.data.category,
+                    effect_entries : i.data.effect_entries,
+                    flavor_text_entries : i.data.flavor_text_entries,
+                    fling_effect : i.data.fling_effect,
+                    game_indices : i.data.game_indices,
+                    machines : i .data.machines,
+                    names : i.data.names
+                });
 
                 if(!exist) {
                     exist = Items.create({
@@ -63,7 +77,7 @@ module.exports = async () => {
             }
         };
         console.timeEnd("Items db ✅ --> time :");
-        
+        return items_relations;
     } catch (error) {
         console.error({"Items db error" : error});
         

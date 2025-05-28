@@ -2,7 +2,7 @@ const axios = require("axios");
 require("dotenv").config()
 const {sequelize} = require("../../db/db.js");
 const pLimit = require("p-limit").default;
-const batching = require("../batching_fn.js");
+const batching = require("../../utils/batching_fn.js");
 
 const {BASEURL} = process.env;
 const {Locations,Game_Indices,Generations,Regions} = sequelize.models;
